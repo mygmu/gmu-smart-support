@@ -47,10 +47,6 @@ header.top{
 /* main split */
 .main{flex:1;display:flex;overflow:hidden}
 .left{flex:1;display:flex;flex-direction:column;min-width:0;border-right:1px solid var(--line)}
-.right{
-  width:430px;flex-shrink:0;background:#0d1b2a;
-  display:flex;flex-direction:column;position:relative;overflow:hidden;
-}
 
 /* ============================= CHAT ============================= */
 .chat{flex:1;overflow-y:auto;padding:22px 26px;scroll-behavior:smooth}
@@ -78,7 +74,21 @@ header.top{
 .msg.user .bubble b{color:#fff}
 
 /* typing */
-.typing{display:flex;gap:4px;padding:4px 2px}
+.typing{display:flex;gap:4px;padding:4px 2px;align-items:center}
+.tstat{font-size:12.5px;color:#6b7a8a;margin-left:8px;animation:fade .3s}
+.caret{display:inline-block;width:2px;height:1em;background:var(--teal);margin-left:2px;vertical-align:-2px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.aipill{display:none}.aipill.show{display:inline-flex}
+.aipill.ok .dot{background:#2ecc71}.aipill.warn .dot{background:#f39c12}.aipill.bad .dot{background:#e74c3c}
+.stbox{background:#fff;border-radius:16px;width:min(560px,94vw);padding:22px 24px;max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.stbox h2{margin:0 0 4px;color:var(--navy);font-size:19px}
+.stbox .row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid #e8edf2;font-size:14px}
+.stbox .row .ic{font-size:18px;line-height:1.2}
+.stbox .row small{display:block;color:#6b7a8a;margin-top:2px;word-break:break-word}
+.stbox .acts{display:flex;gap:8px;margin-top:14px;justify-content:flex-end}
+.stbox .acts button{border:none;border-radius:10px;padding:9px 16px;font-weight:600;cursor:pointer;background:var(--navy);color:#fff}
+.stbox .acts button.alt{background:#e8edf2;color:var(--navy)}
+.suggest{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .typing span{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:bob 1.1s infinite}
 .typing span:nth-child(2){animation-delay:.15s}
 .typing span:nth-child(3){animation-delay:.3s}
@@ -112,109 +122,203 @@ header.top{
 .send:hover{transform:scale(1.06)}
 .send:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
-/* ===================== VIRTUAL DEVICE PANEL ===================== */
+/* ===================== VISUAL GUIDE PANEL ===================== */
+.right{
+  width:clamp(400px,42vw,580px);flex-shrink:0;background:#0d1b2a;
+  display:none;flex-direction:column;position:relative;overflow:hidden;min-height:0;
+}
+.main.hasguide .right{display:flex;animation:fade .3s}
+.main.hasguide.lap .right{width:clamp(560px,60vw,980px)}
 .device-head{
-  padding:14px 18px;color:#cfe8ee;display:flex;align-items:center;gap:10px;
+  padding:11px 16px;color:#cfe8ee;display:flex;align-items:center;gap:10px;
   border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;
 }
 .device-head .t{font-size:13.5px;font-weight:600;letter-spacing:.3px}
 .device-head .s{font-size:11px;opacity:.6}
-.device-tabs{display:flex;gap:6px;padding:12px 16px 6px;flex-wrap:wrap;flex-shrink:0}
+.gclose{margin-left:auto;background:rgba(255,255,255,.12);border:none;color:#fff;width:30px;height:30px;
+  border-radius:8px;cursor:pointer;font-size:14px}
+.gclose:hover{background:rgba(255,255,255,.28)}
+.device-tabs{display:flex;gap:6px;padding:10px 14px 4px;flex-shrink:0}
 .dtab{
-  flex:1;min-width:70px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
-  color:#9fb6c4;padding:8px 6px;border-radius:10px;font-size:11.5px;cursor:pointer;
+  flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  color:#9fb6c4;padding:7px 4px;border-radius:10px;font-size:11.5px;cursor:pointer;
   text-align:center;transition:.2s;font-weight:500;
 }
 .dtab.on{background:var(--teal);color:#fff;border-color:var(--teal)}
 .dtab:hover{color:#fff}
+.gstage{flex:1;min-height:0;display:grid;place-items:center;padding:10px;overflow:hidden}
+.gfit{position:relative}
+.gdev{position:absolute;left:0;top:0;transform-origin:0 0}
 
-.stage{flex:1;display:grid;place-items:center;padding:18px;overflow:hidden;position:relative}
+/* caption + controls */
+.gfoot{flex-shrink:0;padding:10px 16px 14px;background:#0a1521;border-top:1px solid rgba(255,255,255,.08)}
+.gstep{font-size:10.5px;color:#7fb4c4;letter-spacing:.6px;text-transform:uppercase;font-weight:600}
+.gcap{color:#e6f2f6;font-size:13.5px;line-height:1.45;margin:3px 0 9px;min-height:40px}
+.gcap b{color:#7fe0ef}
+.gbar{height:4px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;margin-bottom:9px}
+.gbar i{display:block;height:100%;background:var(--teal);width:0;transition:width .4s}
+.gctl{display:flex;align-items:center;gap:7px}
+.gctl button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);color:#e6f2f6;
+  border-radius:9px;padding:7px 12px;font-size:12.5px;cursor:pointer}
+.gctl button:hover{background:rgba(255,255,255,.22)}
+.gctl button.main-b{background:var(--teal);border-color:var(--teal);min-width:44px}
+.gctl .gvid{margin-left:auto;background:#c0392b;border-color:#c0392b;font-weight:600}
+.gsteps{padding:18px;overflow:auto;flex:1}
+.gsteps .row{opacity:1;transform:none}
 
-/* ---- PHONE FRAME (iOS / Android) ---- */
-.phone{
-  width:230px;height:468px;background:#0b1220;border-radius:36px;
-  border:9px solid #1c2733;box-shadow:0 20px 50px rgba(0,0,0,.5),inset 0 0 0 2px #2a3744;
-  position:relative;overflow:hidden;transition:.4s;
-}
-.phone .notch{
-  position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:90px;height:22px;background:#1c2733;border-radius:0 0 14px 14px;z-index:30;
-}
-.phone.android .notch{width:14px;height:14px;border-radius:50%;top:7px;background:#000}
+/* ---- device frames ---- */
+.gphone{background:#0d1014;border-radius:64px;padding:14px;box-shadow:0 24px 60px rgba(0,0,0,.55),inset 0 0 0 2px #2b3138}
+.gphone .gvp{border-radius:50px}
+.glap{background:#0d1014;border-radius:22px 22px 4px 4px;padding:16px 16px 14px;box-shadow:0 24px 60px rgba(0,0,0,.5),inset 0 0 0 2px #2b3138}
+.glap .gvp{border-radius:6px}
+.glapbase{height:22px;background:linear-gradient(#cdd5dc,#8d99a4);border-radius:0 0 22px 22px;margin:0 -30px;position:relative}
+.glapbase::after{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:170px;height:8px;background:#77838f;border-radius:0 0 12px 12px}
+.gvp{position:relative;overflow:hidden;background:#fff;user-select:none}
+.gscr{position:absolute;inset:0;animation:gfade .4s ease}
+@keyframes gfade{from{opacity:0}to{opacity:1}}
+.ghl{position:absolute;border:4px solid #ffb400;border-radius:14px;box-shadow:0 0 0 6px rgba(255,180,0,.25),0 0 28px rgba(255,180,0,.7);
+  pointer-events:none;opacity:0;transition:opacity .3s;z-index:60;animation:ghlp 1.2s ease-in-out infinite}
+.ghl.on{opacity:1}
+@keyframes ghlp{50%{box-shadow:0 0 0 12px rgba(255,180,0,.1),0 0 40px rgba(255,180,0,.9)}}
+.gptr{position:absolute;z-index:70;left:50%;top:70%;width:46px;height:46px;border-radius:50%;pointer-events:none;
+  background:rgba(40,60,80,.22);border:3px solid rgba(255,255,255,.9);margin:-23px 0 0 -23px;
+  transition:left .9s cubic-bezier(.4,0,.2,1),top .9s cubic-bezier(.4,0,.2,1);box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.gptr.cur{width:0;height:0;border:none;background:none;box-shadow:none;margin:0}
+.gptr.cur::before{content:"";position:absolute;left:0;top:0;width:30px;height:30px;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 2l7.5 19 2.7-7.8L21 10.5z' fill='white' stroke='black' stroke-width='1.4' stroke-linejoin='round'/></svg>") no-repeat;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+.gptr.tap::after{content:"";position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;
+  border:4px solid #ffb400;animation:gtap .7s ease-out}
+@keyframes gtap{from{opacity:1;transform:scale(.3)}to{opacity:0;transform:scale(2.4)}}
 
-/* ---- LAPTOP FRAME (Windows / macOS) ---- */
-.laptop{width:360px;transition:.4s}
-.laptop .screen{
-  background:#0b1220;border:8px solid #1c2733;border-radius:14px 14px 0 0;
-  height:230px;overflow:hidden;position:relative;box-shadow:0 14px 40px rgba(0,0,0,.5);
-}
-.laptop .base{
-  height:14px;background:linear-gradient(#c3ccd4,#8c98a3);border-radius:0 0 12px 12px;
-  position:relative;width:420px;margin-left:-30px;
-}
-.laptop .base::after{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:80px;height:5px;background:#6b7681;border-radius:0 0 7px 7px}
+/* ======================= iOS ======================= */
+.ios{font-family:-apple-system,'SF Pro Text','Helvetica Neue',system-ui,sans-serif;color:#000;font-size:17px}
+.ios .sb{position:absolute;left:0;right:0;top:0;height:54px;display:flex;justify-content:space-between;align-items:center;padding:6px 38px 0 44px;font-weight:600;font-size:17px;z-index:5}
+.ios .sb.w{color:#fff}
+.ios .isl{position:absolute;top:12px;left:50%;width:122px;height:35px;margin-left:-61px;background:#000;border-radius:20px;z-index:9}
+.ios .home{position:absolute;bottom:8px;left:50%;width:140px;height:5px;margin-left:-70px;background:#000;border-radius:3px;z-index:9;opacity:.9}
+.ios .home.w{background:#fff}
+.ios .bg{position:absolute;inset:0;background:#f2f2f7}
+.ios .nav{position:absolute;left:0;right:0;top:54px;height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;color:#007aff;font-size:17px;background:rgba(249,249,249,.94);border-bottom:1px solid #d6d6da}
+.ios .nav b{color:#000;font-weight:600}
+.ios .nav .bold{font-weight:600}
+.ios .body{position:absolute;left:0;right:0;top:102px;bottom:0;overflow:hidden}
+.ios .grp{background:#fff;border-radius:12px;margin:14px 16px;overflow:hidden}
+.ios .li{display:flex;align-items:center;gap:12px;min-height:50px;padding:0 14px;border-bottom:1px solid #e5e5ea;font-size:17px}
+.ios .li:last-child{border-bottom:none}
+.ios .li .ch{margin-left:auto;color:#c4c4c7;font-size:20px}
+.ios .li .val{margin-left:auto;color:#8a8a8e}
+.ios .si{width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#fff;font-size:17px;flex-shrink:0}
+.ios .hd{margin:20px 32px 6px;font-size:13px;color:#6d6d72;text-transform:uppercase}
+.ios .wall{position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,#7aa7e8,#3b5fb5 45%,#1d2f6b)}
+.ios .apps{position:absolute;left:0;right:0;top:92px;display:grid;grid-template-columns:repeat(4,1fr);gap:26px 0;padding:0 14px}
+.ios .app{display:flex;flex-direction:column;align-items:center;gap:6px;color:#fff;font-size:12px}
+.ios .ic{width:68px;height:68px;border-radius:16px;display:grid;place-items:center;font-size:36px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.ios .dock{position:absolute;left:14px;right:14px;bottom:26px;height:92px;background:rgba(255,255,255,.28);border-radius:34px;display:flex;justify-content:space-around;align-items:center;backdrop-filter:blur(8px)}
+.ios .sheet{position:absolute;left:0;right:0;bottom:0;background:#f2f2f7;border-radius:20px 20px 0 0;overflow:hidden;box-shadow:0 -10px 40px rgba(0,0,0,.3)}
+.ios .dim{position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:3}
+.ios .alert{position:absolute;left:50%;top:38%;width:270px;margin-left:-135px;background:rgba(246,246,246,.97);border-radius:14px;text-align:center;overflow:hidden;z-index:6;font-size:13px}
+.ios .alert h4{font-size:17px;font-weight:600;margin:16px 14px 4px}
+.ios .alert p{margin:0 16px 16px;line-height:1.3}
+.ios .alert .ab{border-top:1px solid #c6c6c8;color:#007aff;font-size:17px;padding:12px;font-weight:600}
+.ios .alert .row2{display:flex}.ios .alert .row2 .ab{flex:1}.ios .alert .row2 .ab+.ab{border-left:1px solid #c6c6c8}
+.ios .field{background:#fff;border:1px solid #c6c6c8;border-radius:6px;padding:7px 9px;margin:0 14px 14px;font-size:15px;text-align:left}
+.ios .key{width:78px;height:78px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;color:#fff;font-size:34px;font-weight:300}
+.ios .mail-row{padding:12px 16px 12px 30px;border-bottom:1px solid #e5e5ea;background:#fff;position:relative;line-height:1.3}
+.ios .mail-row .dot{position:absolute;left:11px;top:20px;width:10px;height:10px;border-radius:50%;background:#007aff}
+.ios .attach{display:flex;align-items:center;gap:12px;border:1px solid #d1d1d6;border-radius:12px;padding:10px 12px;background:#fff;margin:14px 0}
+.ios .attach .f{width:44px;height:52px;background:#e9eef6;border-radius:6px;display:grid;place-items:center;font-size:11px;font-weight:700;color:#4a6fa5}
+.ios .urlbar{position:absolute;left:12px;right:12px;bottom:34px;height:50px;border-radius:14px;background:rgba(240,240,244,.97);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.ios .tool{position:absolute;left:0;right:0;bottom:0;height:86px;background:rgba(249,249,249,.96)}
 
-/* screen inner surface */
-.scr{position:absolute;inset:0;font-size:11px;color:#1a2430;overflow:hidden}
+/* ======================= ANDROID ======================= */
+.and{font-family:Roboto,'Google Sans',system-ui,'Segoe UI',sans-serif;color:#1f1f1f;font-size:16px}
+.and .sb{position:absolute;left:0;right:0;top:0;height:40px;display:flex;justify-content:space-between;align-items:center;padding:0 22px;font-size:14px;font-weight:500;z-index:5}
+.and .sb.w{color:#fff}
+.and .cam{position:absolute;top:11px;left:50%;width:14px;height:14px;margin-left:-7px;background:#000;border-radius:50%;z-index:9}
+.and .nav{position:absolute;bottom:8px;left:50%;width:130px;height:5px;margin-left:-65px;background:#1f1f1f;border-radius:3px;z-index:9}
+.and .nav.w{background:#fff}
+.and .bg{position:absolute;inset:0;background:#fdfbff}
+.and .wall{position:absolute;inset:0;background:linear-gradient(160deg,#2f6f73,#17413f 55%,#0d2a2a)}
+.and .apps{position:absolute;left:0;right:0;top:120px;display:grid;grid-template-columns:repeat(4,1fr);gap:26px 0;padding:0 14px}
+.and .app{display:flex;flex-direction:column;align-items:center;gap:6px;color:#fff;font-size:12px}
+.and .ic{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;font-size:30px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.and .gsearch{position:absolute;left:16px;right:16px;bottom:44px;height:56px;border-radius:28px;background:#fff;display:flex;align-items:center;padding:0 20px;gap:12px;color:#5f6368;font-size:16px}
+.and .tb{position:absolute;left:0;right:0;top:40px;height:60px;display:flex;align-items:center;gap:18px;padding:0 16px;font-size:22px;background:#fdfbff}
+.and .tb .ti{font-size:20px;flex:1;font-weight:400}
+.and .body{position:absolute;left:0;right:0;top:100px;bottom:0;overflow:hidden}
+.and .fl{padding:11px 18px;border-bottom:1px solid #e7e0ec;font-size:15px}
+.and .fl small{color:#6b6b72;display:block}
+.and .mrow{display:flex;gap:14px;padding:12px 16px;align-items:flex-start}
+.and .av{width:40px;height:40px;border-radius:50%;background:#1a73e8;color:#fff;display:grid;place-items:center;font-weight:600;flex-shrink:0}
+.and .att{display:flex;align-items:center;gap:12px;border:1px solid #cac4d0;border-radius:14px;padding:10px 12px;margin:14px 16px}
+.and .att .f{width:42px;height:42px;border-radius:10px;background:#e8def8;display:grid;place-items:center;font-size:11px;font-weight:700;color:#4f378b}
+.and .dlg{position:absolute;left:28px;right:28px;top:34%;background:#ece6f0;border-radius:28px;padding:24px;z-index:6;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.and .dlg h4{font-size:22px;font-weight:400;margin:0 0 12px}
+.and .dlg .in{border-bottom:2px solid #6750a4;padding:8px 0;margin:12px 0;font-size:16px}
+.and .dlg .acts{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;font-weight:500;color:#6750a4}
+.and .dlg .acts span{padding:10px 14px;border-radius:20px}
+.and .scrim{position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:3}
+.and .chrome{position:absolute;left:0;right:0;top:40px;height:62px;background:#f1f3f4;display:flex;align-items:center;padding:0 10px;gap:10px}
+.and .chrome .url{flex:1;background:#fff;border-radius:24px;height:42px;display:flex;align-items:center;padding:0 16px;font-size:15px;gap:8px}
 
-/* os wallpapers */
-.wp-ios{background:linear-gradient(160deg,#4a6fa5,#2b4b7a 60%,#1a2f52)}
-.wp-android{background:linear-gradient(160deg,#1b5e5a,#0f3d3a)}
-.wp-win{background:linear-gradient(135deg,#0a4b78,#063456)}
-.wp-mac{background:linear-gradient(160deg,#b06a9e,#6a5ba8 50%,#3d6aa8)}
+/* ======================= WINDOWS ======================= */
+.win{font-family:'Segoe UI Variable','Segoe UI',system-ui,sans-serif;font-size:18px;color:#1b1b1b}
+.win .desk{position:absolute;inset:0;background:radial-gradient(ellipse at 35% 40%,#3b8fd9,#1a56a8 45%,#0b2a5c)}
+.win .tbar{position:absolute;left:0;right:0;bottom:0;height:52px;background:rgba(243,243,243,.92);display:flex;align-items:center;justify-content:center;gap:12px;font-size:22px;z-index:20;border-top:1px solid #d0d0d0}
+.win .tbar span{width:40px;height:40px;display:grid;place-items:center;border-radius:6px}
+.win .tbar .act{background:rgba(255,255,255,.7);border-bottom:3px solid #0067c0}
+.win .tbar .clk{position:absolute;right:16px;font-size:12px;text-align:right;line-height:1.25}
+.win .wnd{position:absolute;background:#fff;border-radius:9px;overflow:hidden;box-shadow:0 14px 50px rgba(0,0,0,.45);border:1px solid #9aa4ae;display:flex;flex-direction:column}
+.win .wt{height:44px;background:#f3f3f3;display:flex;align-items:center;padding-left:14px;font-size:16.5px;flex-shrink:0;gap:8px}
+.win .wt .ctl{margin-left:auto;display:flex;height:100%}
+.win .wt .ctl i{width:46px;display:grid;place-items:center;font-style:normal;font-size:14px}
+.win .wt .ctl i:last-child:hover{background:#c42b1c;color:#fff}
+.win .wb{flex:1;position:relative;overflow:hidden}
+.win .btn{display:inline-block;padding:9px 26px;border:1px solid #adadad;background:#e1e1e1;font-size:17px;min-width:96px;text-align:center;border-radius:3px}
+.win .btn.pri{background:#0067c0;border-color:#0067c0;color:#fff}
+.win .wiz{position:absolute;inset:0;background:#fff;padding:24px 30px;font-size:17.5px;display:flex;flex-direction:column}
+.win .wiz h3{font-size:24px;font-weight:400;color:#003399;margin:0 0 14px}
+.win .wiz .foot{margin-top:auto;display:flex;justify-content:flex-end;gap:8px;padding-top:14px;background:#f0f0f0;margin:auto -28px -22px;padding:14px 28px}
+.win .inp{border:1px solid #7a7a7a;padding:8px 10px;background:#fff;font-size:17px}
+.win .fx{display:flex;align-items:center;gap:9px;padding:8px 14px;font-size:16.5px}
+.win .fx.sel{background:#cce8ff}
 
-/* status bar */
-.sbar{height:20px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 14px;color:#fff;font-size:10px;font-weight:600;position:relative;z-index:20}
-.sbar .r{display:flex;gap:4px;align-items:center}
+/* ======================= macOS ======================= */
+.mac{font-family:-apple-system,'SF Pro Text','Helvetica Neue',system-ui,sans-serif;font-size:18px;color:#1d1d1f}
+.mac .desk{position:absolute;inset:0;background:linear-gradient(135deg,#c86dd7,#6f5be0 45%,#3a8ff0)}
+.mac .menu{position:absolute;left:0;right:0;top:0;height:34px;background:rgba(255,255,255,.35);backdrop-filter:blur(12px);display:flex;align-items:center;gap:24px;padding:0 20px;font-size:17px;z-index:20}
+.mac .menu b{font-weight:700}.mac .menu .r{margin-left:auto;display:flex;gap:16px}
+.mac .dock{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);height:76px;padding:0 14px;background:rgba(255,255,255,.32);border-radius:22px;display:flex;align-items:center;gap:12px;z-index:20;border:1px solid rgba(255,255,255,.4)}
+.mac .dock span{width:56px;height:56px;border-radius:13px;display:grid;place-items:center;font-size:32px;background:rgba(255,255,255,.55)}
+.mac .wnd{position:absolute;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 22px 70px rgba(0,0,0,.5),0 0 0 1px rgba(0,0,0,.2);display:flex;flex-direction:column}
+.mac .wt{height:48px;background:linear-gradient(#ececec,#dcdcdc);display:flex;align-items:center;padding:0 14px;gap:8px;flex-shrink:0;border-bottom:1px solid #bdbdbd;font-size:16px;font-weight:600}
+.mac .tl{display:flex;gap:8px}.mac .tl i{width:13px;height:13px;border-radius:50%;display:block}
+.mac .wb{flex:1;position:relative;overflow:hidden}
+.mac .btn{display:inline-block;padding:7px 26px;border-radius:7px;background:#fff;border:1px solid #c9c9c9;font-size:17px;text-align:center;min-width:70px;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.mac .btn.pri{background:#0a84ff;border-color:#0a84ff;color:#fff}
+.mac .sheetd{position:absolute;background:rgba(236,236,236,.97);border-radius:14px;padding:24px 28px;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px rgba(0,0,0,.15);z-index:30;font-size:17px}
+.mac .inp{border:1px solid #c9c9c9;border-radius:6px;padding:7px 10px;background:#fff;font-size:17px}
 
-/* generic app window on screen */
-.win{
-  position:absolute;left:12px;right:12px;top:40px;bottom:14px;background:#fff;
-  border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.3);
-  display:flex;flex-direction:column;opacity:0;transform:translateY(16px);
-}
-.win.show{animation:winIn .5s forwards}
-@keyframes winIn{to{opacity:1;transform:none}}
-.win .bar{height:30px;background:var(--navy);display:flex;align-items:center;
-  gap:6px;padding:0 10px;color:#fff;font-size:10.5px;font-weight:600}
-.win .bar .dots{display:flex;gap:4px}
-.win .bar .dots i{width:8px;height:8px;border-radius:50%;display:block}
-.win .body{flex:1;padding:12px;overflow:hidden;position:relative;background:#f6f9fb}
+/* ======================= shared web content ======================= */
+.web{position:absolute;inset:0;background:#f4f6f8;color:#1d2a38;overflow:hidden;font-family:system-ui,'Segoe UI',Roboto,sans-serif}
+.web .hdr{background:#003057;color:#fff;display:flex;align-items:center;gap:10px;padding:0 5%;height:var(--wh,64px);font-weight:700}
+.web .hdr i{width:34px;height:34px;background:#fff;color:#003057;border-radius:8px;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:13px}
+.web .card{background:#fff;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,.1);width:min(88%,460px);margin:var(--cm,28px) auto 0;padding:var(--cp,26px)}
+.web h2{font-size:var(--h2,22px);margin:0 0 14px;color:#003057}
+.web label{display:block;font-size:var(--fs,14px);font-weight:600;margin:12px 0 5px}
+.web .fi{border:1.5px solid #c8d3dc;border-radius:7px;padding:var(--fp,11px) 12px;font-size:var(--fs,14px);background:#fff;color:#1d2a38;min-height:var(--fh,42px);display:flex;align-items:center}
+.web .wbtn{background:#007B8A;color:#fff;border-radius:7px;text-align:center;padding:var(--fp,11px);font-weight:600;font-size:var(--fs,14px);margin-top:18px}
+.web .lnk{color:#0a66c2;font-size:var(--fs,14px);margin-top:14px;display:inline-block}
+.web .crs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:var(--cm,24px) 5%}
+.web .crs div{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08);font-size:var(--fs,14px);font-weight:600}
+.web .crs div i{display:block;height:var(--ch,60px);background:linear-gradient(135deg,#007B8A,#005587)}
+.web .crs div span{display:block;padding:10px 12px}
 
-/* animated UI rows inside the app */
-.row{display:flex;align-items:center;gap:8px;padding:9px 10px;background:#fff;
-  border:1px solid var(--line);border-radius:9px;margin-bottom:7px;font-size:11px;
-  opacity:0;transform:translateX(-10px)}
-.row.in{animation:rowIn .45s forwards}
-@keyframes rowIn{to{opacity:1;transform:none}}
-.row .ic{width:22px;height:22px;border-radius:6px;background:var(--teal-l);
-  display:grid;place-items:center;color:var(--teal);font-size:12px;flex-shrink:0}
-.row.sel{background:var(--teal-l);border-color:var(--teal)}
-.row .chk{margin-left:auto;color:var(--ok);font-weight:800;opacity:0}
-.row.done .chk{opacity:1;animation:pop .3s}
-@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.3)}100%{transform:scale(1)}}
-
-/* tap ripple */
-.tap{position:absolute;width:30px;height:30px;border-radius:50%;
-  border:2px solid var(--teal);pointer-events:none;opacity:0;z-index:40}
-.tap.go{animation:ripple .6s ease-out}
-@keyframes ripple{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(1.8)}}
-
-/* caption under device */
-.dcap{
-  position:absolute;bottom:12px;left:16px;right:16px;color:#bcd4de;
-  font-size:11.5px;text-align:center;background:rgba(0,0,0,.35);
-  padding:8px 12px;border-radius:10px;min-height:34px;display:flex;
-  align-items:center;justify-content:center;line-height:1.4;
-  border:1px solid rgba(255,255,255,.08);
-}
-.dcap b{color:#7fe0ef}
-
-/* idle hint */
-.idle{color:#5e7688;font-size:12.5px;text-align:center;max-width:220px;line-height:1.6}
-.idle .big{font-size:40px;margin-bottom:8px;opacity:.5}
+.gsteps .srow{display:flex;gap:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 14px;margin-bottom:9px;color:#e6f2f6}
+.gsteps .srow b{width:26px;height:26px;border-radius:50%;background:var(--teal);display:grid;place-items:center;font-size:12px;flex-shrink:0}
+.gsteps .srow span{font-weight:600;font-size:13.5px;display:block}
+.gsteps .srow small{display:block;opacity:.8;font-size:12.5px;margin-top:3px;line-height:1.4}
 
 /* satisfaction bar */
 .satis{
@@ -293,8 +397,9 @@ header.top{
   text-decoration:underline;margin-top:6px}
 
 @media(max-width:900px){
-  .right{display:none}
   .msg{max-width:95%}
+  .main.hasguide .right{position:fixed;inset:0;width:auto;z-index:900}
+  .pill.hide-s{display:none}
 }
 </style>
 </head>
@@ -310,7 +415,9 @@ header.top{
     </div>
     <div class="spacer"></div>
     <div class="pill" onclick="openTicket()"><span class="dot"></span> Raise a Ticket</div>
+    <label class="pill" title="Read answers aloud" style="cursor:pointer"><input type="checkbox" id="ttsToggle" style="accent-color:#00b5c9" onchange="track('read_aloud',{detail:this.checked?'on':'off'})"> 🔊 Read aloud</label>
     <div class="pill" id="rolePill" onclick="openRole()" title="Change who you are">👤 Select role</div>
+    <div class="pill aipill" id="aiPill" onclick="openAIStatus()" title="AI connection status (admin only)"><span class="dot"></span> <span id="aiPillTxt">AI…</span></div>
     <div class="pill" onclick="openPortal()">Support Portal</div>
   </header>
   <div class="notice" id="notice"></div>
@@ -345,28 +452,34 @@ header.top{
       </div>
     </div>
 
-    <!-- RIGHT: VIRTUAL DEVICE -->
-    <div class="right">
+    <!-- RIGHT: VISUAL GUIDE (shown only when a topic has a guide) -->
+    <div class="right" id="guidePanel">
       <div class="device-head">
         <span style="font-size:17px">🖥️</span>
         <div>
-          <div class="t">Live Visual Guide</div>
-          <div class="s">Watch the steps on a real device screen</div>
+          <div class="t" id="gTitle">Visual guide</div>
+          <div class="s">Follow the exact taps and clicks on your own device</div>
         </div>
-        <label class="voice-toggle" title="Read answers aloud">
-          <input type="checkbox" id="ttsToggle" onchange="track('read_aloud',{detail:this.checked?'on':'off'})"> 🔊 Read aloud
-        </label>
+        <button class="gclose" onclick="closeGuide()" aria-label="Close guide" title="Close">✕</button>
       </div>
       <div class="device-tabs" id="dtabs">
-        <div class="dtab on" data-os="ios"     onclick="setOS('ios')">iOS</div>
-        <div class="dtab"     data-os="android" onclick="setOS('android')">Android</div>
-        <div class="dtab"     data-os="win"     onclick="setOS('win')">Windows</div>
-        <div class="dtab"     data-os="mac"     onclick="setOS('mac')">macOS</div>
+        <div class="dtab" data-os="ios"     onclick="setOS('ios')">iPhone / iPad</div>
+        <div class="dtab" data-os="android" onclick="setOS('android')">Android</div>
+        <div class="dtab" data-os="win"     onclick="setOS('win')">Windows</div>
+        <div class="dtab" data-os="mac"     onclick="setOS('mac')">Mac</div>
       </div>
-      <div class="stage" id="stage">
-        <div class="idle" id="idle">
-          <div class="big">📱💻</div>
-          Ask a question and the matching steps will play out here on a virtual device screen.
+      <div class="gstage" id="gstage"></div>
+      <div class="gsteps" id="gsteps" style="display:none"></div>
+      <div class="gfoot" id="gfoot">
+        <div class="gstep" id="gStepLbl"></div>
+        <div class="gcap" id="gCap"></div>
+        <div class="gbar"><i id="gBar"></i></div>
+        <div class="gctl">
+          <button onclick="gPrev()" title="Previous step">◀</button>
+          <button class="main-b" id="gPlay" onclick="gToggle()" title="Pause / play">⏸</button>
+          <button onclick="gNext()" title="Next step">▶</button>
+          <button onclick="gReplay()" title="Start again">↻</button>
+          <button class="gvid" id="gVid" onclick="gVideo()" style="display:none">🎥 Watch video</button>
         </div>
       </div>
     </div>
@@ -382,6 +495,15 @@ header.top{
       <button class="modal-x" onclick="closeVideo()" aria-label="Close">✕</button>
     </div>
     <div class="modal-body" id="videoBody"></div>
+  </div>
+</div>
+
+<!-- ===================== AI STATUS (admin) ===================== -->
+<div class="modal-overlay" id="aiModal" onclick="if(event.target===this)closeAIStatus()">
+  <div class="stbox"><h2>AI connection status</h2>
+    <div style="color:#6b7a8a;font-size:13px" id="aiWhen"></div>
+    <div id="aiRows"></div>
+    <div class="acts"><button class="alt" onclick="closeAIStatus()">Close</button><button onclick="checkAI(true)">Re-test now</button></div>
   </div>
 </div>
 
@@ -461,7 +583,7 @@ const KB_BUILTIN = [
   {
     id:'certificate', cat:'Certificate', anim:'certificate',
     kw:['certificate','identity certificate','digital certificate','ssl certificate','no login page','login page not showing','cant access moodle','moodle not opening','moodle not loading','keychain','install certificate','controlled system access','profile not signed','not verified','certificate password','p12','renew certificate','certificate expired','renew'],
-    a:"Moodle (MyGMU) can only open on a device that carries your personal **digital identity certificate**. Without it, no login page appears — and on iPhone you may see <b>profile not signed in / not verified</b>.\n\n**Step 1 — Request it.** From your University email, email <a href='mailto:identity@gmu.ac.ae?subject=LMS access'>identity@gmu.ac.ae</a> with the subject **LMS access**. You'll receive a reply headed *Controlled System Access* with your certificate file and its password. It is issued to you alone — never share or forward it.\n\n**Step 2 — Install it** using the video guide for your device:\n<button class='vbtn' onclick=\"openVideo('ios')\">📱 iPhone &amp; iPad guide</button> <button class='vbtn' onclick=\"openVideo('mac')\">💻 Mac guide</button> <button class='vbtn' onclick=\"openVideo('win')\">🪟 Windows guide</button>\n\nUse the **client.p12** file on **Windows** and the **clientlegacy.p12** file on **Mac**. When entering the certificate password, **copy it with no extra spaces** — a trailing space is the usual cause of an \"incorrect password\" error.\n\n**Step 3 — Restart the device** after installing (this is the most-skipped step — without it the certificate is not picked up), then open <a href='https://lms.gmu.ac.ae/moodle' target='_blank'>lms.gmu.ac.ae/moodle</a> in a **web browser** (Remedial and BCPS students: <a href='https://lms-online.gmu.ac.ae/moodle/login/index.php' target='_blank'>lms-online.gmu.ac.ae/moodle</a> — the same certificate is required). The Moodle mobile app is not supported.\n\n**Install it on every device** you use — laptop, tablet and phone each need their own copy.\n\n**Still not opening?** Confirm you restarted, installed it on this device, and are in a browser (not the app). On Windows, install it for your own user account, then close and reopen the browser; you can also try removing VPN and temporarily disabling antivirus. On Mac, open Keychain Access and make sure the certificate in your name is Trusted and any expired certificates are removed. On iPhone/iPad, remove any VPN and update to the latest iOS. If it still fails, please raise a ticket or visit the E-Learning Centre — a representative will assist you."
+    a:"Moodle (MyGMU) can only open on a device that carries your personal **digital identity certificate**. Without it, no login page appears — and on iPhone you may see <b>profile not signed in / not verified</b>.\n\n**Step 1 — Request it.** From your University email, email <a href='mailto:identity@gmu.ac.ae?subject=LMS access'>identity@gmu.ac.ae</a> with the subject **LMS access**. You'll receive a reply headed *Controlled System Access* with your certificate file and its password. It is issued to you alone — never share or forward it.\n\n**Step 2 — Install it** using the video guide for your device:\n<button class='vbtn' onclick=\"openVideo('ios')\">📱 iPhone &amp; iPad guide</button> <button class='vbtn' onclick=\"openVideo('mac')\">💻 Mac guide</button> <button class='vbtn' onclick=\"openVideo('win')\">🪟 Windows guide</button>\n\n**What to do on each device:**\n• **iPhone/iPad:** Mail → save the attachment to **Files** → tap the file → **Settings → General → VPN & Device Management** → *identity certificate* → **Install** → passcode → paste the password → **Next → Install → Done** → restart → open Safari.\n• **Mac:** download the file and open it → paste the password → open **Keychain Access**, select **login**, double-click the certificate in your name → **Trust → Always Trust** → restart → open Safari.\n• **Android:** download the attachment and tap it → paste the password → install it for **VPN and apps** → restart → open Chrome.\n• **Windows:** open the file → **Certificate Import Wizard** → **Next** → paste the password → store in **Personal** → **Finish** → close and reopen the browser.\n\nUse the **clientlegacy.p12** file on **iPhone/iPad and Mac**, and the **client.p12** file on **Windows and Android**. When entering the certificate password, **copy it with no extra spaces** — a trailing space is the usual cause of an \"incorrect password\" error.\n\n**Step 3 — Restart the device** after installing (this is the most-skipped step — without it the certificate is not picked up), then open <a href='https://lms.gmu.ac.ae/moodle' target='_blank'>lms.gmu.ac.ae/moodle</a> in a **web browser** (Remedial and BCPS students: <a href='https://lms-online.gmu.ac.ae/moodle/login/index.php' target='_blank'>lms-online.gmu.ac.ae/moodle</a> — the same certificate is required). The Moodle mobile app is not supported.\n\n**Install it on every device** you use — laptop, tablet and phone each need their own copy.\n\n**Still not opening?** Confirm you restarted, installed it on this device, and are in a browser (not the app). On Windows, install it for your own user account, then close and reopen the browser; you can also try removing VPN and temporarily disabling antivirus. On Mac, open Keychain Access and make sure the certificate in your name is Trusted and any expired certificates are removed. On iPhone/iPad, remove any VPN and update to the latest iOS. If it still fails, please raise a ticket or visit the E-Learning Centre — a representative will assist you."
   },
   {
     id:'cert_renew', cat:'Certificate', anim:'certificate',
@@ -476,7 +598,7 @@ const KB_BUILTIN = [
   {
     id:'email', cat:'Email', anim:'email',
     kw:['email','gmail','mail setup','configure email','student email','university email','2 step','2-step','two step','two-step','otp','verification','activate email','microsoft'],
-    a:"Your University email is a **Google Workspace** account (yourID@mygmu.ac.ae) — the official channel for all University communication.\n\n**To activate it:**\n1. Go to <a href='https://mail.google.com' target='_blank'>mail.google.com</a> (use an incognito/private window if already signed in to a personal Google account).\n2. Sign in with your University email and the **temporary password** from your welcome email.\n3. Accept the Google terms and set your own new password.\n4. Then enable **2-Step Verification** at myaccount.google.com/security — this is mandatory.\n\n**Can't get the OTP for 2-Step Verification?**\n• On the sign-in screen, choose **Try another way** to receive the OTP on your **registered mobile number**.\n• Or, on a device already signed in to the Gmail app, open **Manage your Google Account → Security → 2-Step Verification**, add your phone number, and receive the OTP there.\n\n**To reset your official email/Microsoft password:** self-service reset will show *\"ask your administrator for permission\"* — this is expected. Please **raise a ticket** or write to support@mygmu.ac.ae, and the support team will reset it and send you the updated credentials (your account on the ...@gulfmedicaluniversity.onmicrosoft.com domain with a temporary password to change on first sign-in)."
+    a:"Your University email is a **Google Workspace** account (yourID@mygmu.ac.ae) — the official channel for all University communication.\n\n**To activate it:**\n1. Go to <a href='https://mail.google.com' target='_blank'>mail.google.com</a> (use an incognito/private window if already signed in to a personal Google account).\n2. Sign in with your University email and the **temporary password** from your welcome email.\n3. Accept the Google terms and set your own new password.\n4. Then enable **2-Step Verification** at myaccount.google.com/security — this is mandatory.\n\n**Can't get the OTP for 2-Step Verification?**\n• On the sign-in screen, choose **Try another way** to receive the OTP on your **registered mobile number**.\n• Or, on a device already signed in to the Gmail app, open **Manage your Google Account → Security → 2-Step Verification**, add your phone number, and receive the OTP there.\n\n**Forgot your University email password?** Self-service reset (*Forgot password* on the Google sign-in screen) works **only if 2-Step Verification is already turned on** for your account, because the verification code is sent to your registered mobile. If 2-Step Verification is **not** turned on, you cannot reset it yourself — please **contact support@mygmu.ac.ae or raise a ticket** and the support team will assist you.\n\n**To reset your official email/Microsoft password:** self-service reset will show *\"ask your administrator for permission\"* — this is expected. Please **raise a ticket** or write to support@mygmu.ac.ae, and the support team will reset it and send you the updated credentials (your account on the ...@gulfmedicaluniversity.onmicrosoft.com domain with a temporary password to change on first sign-in)."
   },
   {
     id:'examplify', cat:'Examplify', anim:'exam',
@@ -524,8 +646,14 @@ const RULES_BUILTIN = `CRITICAL FACTS (apply these precisely):
    • Install video guides (give the matching one): iPhone/iPad https://m.youtube.com/shorts/LJl8VE7GTvQ ;
      Mac https://m.youtube.com/shorts/nTfsmollEdI ; Windows
      https://drive.google.com/file/d/1vVE3LArRAsf3nPxYUuCl-q99wKgUhMTi/view
-   • File by OS: use client.p12 on WINDOWS and clientlegacy.p12 on MAC. If the password is rejected, tell
+   • File by OS: use clientlegacy.p12 on IPHONE/IPAD and MAC; use client.p12 on WINDOWS and ANDROID. If the password is rejected, tell
      them to copy it with NO extra/trailing spaces — that is the usual cause.
+   • Per device: iPHONE/iPAD — save the email attachment to Files, tap it, then Settings → General → VPN & Device
+     Management → identity certificate → Install → passcode → paste password → Next → Install → Done, restart, open
+     Safari. MAC — open the file, paste password, in Keychain Access (login) double-click the certificate in their name
+     and set Trust to Always Trust, restart. ANDROID — download and tap the file, paste password, install for VPN and
+     apps, restart, open Chrome. WINDOWS — open the file, Certificate Import Wizard, Next, paste password, store in
+     Personal, Finish, close and reopen the browser.
    • RESTART the device after installing — this is the most-skipped step; without it the certificate is
      not picked up. Then open lms.gmu.ac.ae/moodle in a WEB BROWSER (the Moodle mobile app is not supported).
    • Install separately on EACH device (laptop, tablet, phone).
@@ -551,7 +679,11 @@ const RULES_BUILTIN = `CRITICAL FACTS (apply these precisely):
    your administrator for permission" — that is expected. The student must raise a ticket / contact
    support@mygmu.ac.ae; the support team resets it and sends updated credentials (an
    ...@gulfmedicaluniversity.onmicrosoft.com account with a temporary password to change on first sign-in).
-   Do NOT attempt to reset it yourself or reveal any password. For Google 2-Step Verification OTP problems →
+   Do NOT attempt to reset it yourself or reveal any password.
+   UNIVERSITY EMAIL (GOOGLE) SELF-PASSWORD-RESET is available ONLY when 2-Step Verification is already ON for
+   the account (the code goes to the registered mobile). If 2-Step Verification is NOT on, self-reset is not
+   possible: tell the student to contact support@mygmu.ac.ae or raise a ticket. Always ask/confirm whether
+   2-Step Verification is on before guiding a reset. For Google 2-Step Verification OTP problems →
    "Try another way" to get the OTP on the registered mobile number, or on a device already signed into
    Gmail, open Manage Account → Security → 2-Step Verification, add the phone number, and receive the OTP there.
 
@@ -683,20 +815,37 @@ function feedback(ok){
 }
 
 const chat  = document.getElementById('chat');
-const idle  = document.getElementById('idle');
-const stage = document.getElementById('stage');
 
 /* ============================================================
    CHAT RENDERING
    ============================================================ */
-function addMsg(text, who){
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function addMsg(text, who, opt){
+  opt=opt||{};
   const m = document.createElement('div');
   m.className = 'msg '+who;
-  const av = who==='bot' ? 'G' : 'You'.charAt(0);
-  m.innerHTML = `<div class="av">${who==='bot'?'G':'U'}</div><div class="bubble">${format(text)}</div>`;
+  const shown = opt.plain ? esc(text) : text;
+  m.innerHTML = `<div class="av">${who==='bot'?'G':'U'}</div><div class="bubble">${opt.type?'':format(shown)}</div>`;
   chat.appendChild(m);
   chat.scrollTop = chat.scrollHeight;
+  if(opt.type) typeInto(m.querySelector('.bubble'), shown, opt.done);
   return m;
+}
+/* Live typing: reveals the answer a few characters at a time (finishes in ~5 s at most).
+   Click the bubble to show everything at once. */
+function typeInto(el, text, done){
+  let i=0, fin=false;
+  const step=Math.max(2,Math.ceil(text.length/300));        // chars per tick, ~16 ms tick
+  function paint(n){
+    let part=text.slice(0,n);
+    const open=(part.match(/\*\*/g)||[]).length%2; if(open) part+='**';
+    part=part.replace(/(https?:\/\/[^\s<]*)$/, n<text.length?'':'$1');   // don't link half a URL
+    el.innerHTML=format(part)+(n<text.length?'<span class="caret"></span>':'');
+    chat.scrollTop=chat.scrollHeight;
+  }
+  function finish(){ if(fin)return; fin=true; clearInterval(t); paint(text.length); el.onclick=null; if(done)done(); }
+  const t=setInterval(()=>{ i+=step; if(i>=text.length) finish(); else paint(i); },16);
+  el.onclick=finish; paint(0);
 }
 function format(t){
   return t
@@ -707,9 +856,10 @@ function format(t){
 function typing(){
   const m=document.createElement('div');
   m.className='msg bot';m.id='typing';
-  m.innerHTML=`<div class="av">G</div><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div>`;
+  m.innerHTML=`<div class="av">G</div><div class="bubble"><div class="typing"><span></span><span></span><span></span><em class="tstat" id="tstat" style="font-style:normal">Thinking…</em></div></div>`;
   chat.appendChild(m);chat.scrollTop=chat.scrollHeight;
 }
+function typingStatus(t){const e=document.getElementById('tstat'); if(e) e.textContent=t}
 function stopTyping(){const t=document.getElementById('typing');if(t)t.remove()}
 function autosize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px'}
 
@@ -760,225 +910,731 @@ async function sendMsg(){
 
   typing();
 
-  let answer='';
+  let answer='', ai={answer:'',errors:{}};
   try{
-    answer = await askAI(q);
+    ai = await askAI(q);
+    answer = ai.answer;
   }catch(e){ answer=''; }
 
   const src = answer ? 'ai' : (hit ? 'local' : 'none');
   const cat = hit ? hit.cat : 'Other / Unmatched';
   lastCategory = cat;
   track('question',{category:cat,source:src,input:mode,detail:hit?'':q});   // usage + purpose
-  // Fallback to local KB answer if AI unavailable
-  if(!answer){
+  let offline=false;
+  if(!answer){                 // AI unreachable: fall back to the approved guide from the sheet
+    offline=true;
     if(hit){ answer = hit.a; }
-    else   { answer = "I wasn't able to find an answer for this one. Please raise a support ticket and a representative will contact you directly to assist:\n\n👉 "+LINKS.ticket+"\n\nYou can also reach us at "+LINKS.support+" or visit the support portal."; }
+    else   { answer = "I couldn't get an answer for that just now. Please pick a topic below, or raise a support ticket and a representative will contact you directly:\n\n👉 "+LINKS.ticket+"\n\nYou can also reach us at "+LINKS.support+" or visit the support portal."; }
   }
 
   if(src!=='ai') logLocal(q,answer,cat,src);
   stopTyping();
-  addMsg(answer,'bot');
-  history.push({role:'assistant',content:answer});
+  history.push({role:'assistant',content:src==='ai'?answer:String(answer).replace(/<[^>]+>/g,' ')});
   firstTurn=false;
-  document.getElementById('sendBtn').disabled=false;
 
+  const after=function(bubbleMsg){
+    if(src==='ai' && hit){                       // keep the certificate video buttons next to AI answers
+      const vb=(hit.a.match(/<button class='vbtn'[\s\S]*?<\/button>/g)||[]).join(' ');
+      if(vb && bubbleMsg) bubbleMsg.querySelector('.bubble').insertAdjacentHTML('beforeend','<div style="margin-top:8px">'+vb+'</div>');
+    }
+    if(src==='none' || (offline && !hit)) addTopicChips(bubbleMsg);
+    if(isNarrow() && hit && guideAvailable(hit.anim)){G.cat=hit.cat;addGuideButton(hit.anim);}
+    document.getElementById('sendBtn').disabled=false;
+    chat.scrollTop=chat.scrollHeight;
+    showSatis();
+  };
+  if(src==='ai'){
+    const msg=addMsg(answer,'bot',{plain:true,type:true,done:function(){after(msg)}});
+  }else{
+    const msg=addMsg(answer,'bot'); after(msg);
+  }
   speak(answer);            // read aloud if the toggle is on
-  showSatis();              // offer escalation after every substantive answer
+}
+function addTopicChips(msg){
+  if(!msg) return;
+  const w=document.createElement('div'); w.className='suggest';
+  CHIPS.slice(0,6).forEach(t=>{const b=document.createElement('div');b.className='chip';b.textContent=t;
+    b.onclick=()=>{document.getElementById('input').value=t;sendMsg()};w.appendChild(b)});
+  msg.querySelector('.bubble').appendChild(w);
 }
 
 /* ============================================================
    AI CALL  (Nemotron → OpenRouter via Apps Script)
    ============================================================ */
-async function askAI(q){
-  if(!BACKEND_URL || BACKEND_URL.indexOf('PASTE')===0) return '';   // not configured yet
-  const res = await fetch(BACKEND_URL,{
-    method:'POST',
-    headers:{'Content-Type':'text/plain;charset=utf-8'}, // avoids CORS preflight on Apps Script
-    body:JSON.stringify({
-      action:'ask',
-      system:SYSTEM_PROMPT,
-      message:q,
-      history:history.slice(-8),
-      name:'Anonymous',
-      role:userRole,
-      category:(matchKB(q)||{}).cat || 'Other / Unmatched'
-    })
+const AI_ORDER=['groq','nemotron','openrouter','gemini'];
+const AI_HEDGE_MS=4000;      // if a model has not answered by then, start the next one in parallel
+const AI_CAP_MS=28000;       // stop waiting altogether
+let aiState={status:'unknown',errors:{},ms:0,source:'',when:0};
+/* Races the models. The first provider starts immediately; the next one starts the moment
+   the previous fails (instant failover) or after AI_HEDGE_MS of silence (slow model). The first
+   good answer wins and the others are cancelled. */
+function askAI(q){
+  return new Promise(resolve=>{
+    if(!backendReady()){ aiState={status:'nourl',errors:{},when:Date.now()}; updateAIPill(); return resolve({answer:'',errors:{},nourl:true}); }
+    const t0=Date.now(), errors={}, ctrls=[]; let next=0, running=0, done=false, hedge=null;
+    const body=p=>JSON.stringify({action:'ask',provider:p,message:q,history:history.slice(-6,-1),name:'Anonymous',role:userRole,college:userCollege,
+      category:(matchKB(q)||{}).cat||'Other / Unmatched',
+      system:KB_VERSION===''?SYSTEM_PROMPT:undefined});      // server builds the prompt from the sheet; this is only a safety net
+    function finish(r){
+      if(done)return; done=true; clearTimeout(hedge); clearTimeout(cap);
+      ctrls.forEach(c=>{try{c.abort()}catch(e){}});
+      aiState=r.answer?{status:'ok',errors:errors,ms:Date.now()-t0,source:r.source,model:r.model,when:Date.now()}
+                      :{status:'fail',errors:errors,when:Date.now()};
+      updateAIPill(); resolve({answer:r.answer||'',source:r.source||'',errors:errors});
+    }
+    function launch(){
+      if(done||next>=AI_ORDER.length)return;
+      const p=AI_ORDER[next++]; running++;
+      const c=new AbortController(); ctrls.push(c);
+      if(next>1) typingStatus('Still working on it…');
+      fetch(BACKEND_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:body(p),signal:c.signal})
+        .then(r=>r.json()).then(d=>{
+          running--;
+          if(d&&d.ok&&d.answer) return finish({answer:d.answer,source:d.source,model:d.model});
+          errors[p]=(d&&d.errors&&d.errors[p])||(d&&d.error)||'No answer';
+          advance();
+        }).catch(e=>{ running--; if(done)return; errors[p]=String(e&&e.message||e); advance(); });
+      clearTimeout(hedge);
+      if(next<AI_ORDER.length) hedge=setTimeout(launch,AI_HEDGE_MS);      // slow model -> start the next one
+    }
+    function advance(){ if(done)return; if(next<AI_ORDER.length) launch(); else if(running===0) finish({answer:''}); }
+    const cap=setTimeout(()=>{errors._timeout='No reply within '+AI_CAP_MS/1000+' s'; finish({answer:''})},AI_CAP_MS);
+    launch();
   });
-  const data=await res.json();
-  return data.ok ? data.answer : '';
 }
 
 /* ============================================================
-   VIRTUAL DEVICE ENGINE
+   AI STATUS  (admin only: open the app with  ?admin  once)
+   Shows whether the AI is connected, which model answered, and why a model failed.
    ============================================================ */
+let adminMode=false, aiHealth=null;
+function initAdmin(){
+  try{
+    const u=new URLSearchParams(location.search);
+    if(u.has('admin')) lsSet('gmuAdmin',u.get('admin')==='0'?'':'1');
+  }catch(e){}
+  adminMode=lsGet('gmuAdmin')==='1';
+  document.getElementById('aiPill').classList.toggle('show',adminMode);
+  if(adminMode){ updateAIPill(); checkAI(false); }
+}
+function updateAIPill(){
+  const el=document.getElementById('aiPill'), t=document.getElementById('aiPillTxt'); if(!el)return;
+  let cls='warn',txt='AI: checking…';
+  if(!backendReady()){cls='bad';txt='AI: URL not set';}
+  else if(aiState.status==='ok'||(aiHealth&&aiHealth.connected&&aiState.status!=='fail')){cls='ok';txt='AI: connected'+(aiHealth&&aiHealth.working?' ('+aiHealth.working+')':'');}
+  else if(aiState.status==='fail'||(aiHealth&&aiHealth.connected===false)){cls='bad';txt='AI: not responding';}
+  else if(aiHealth&&aiHealth.unreachable){cls='bad';txt='AI: backend unreachable';}
+  el.className='pill aipill '+cls+(adminMode?' show':''); t.textContent=txt;
+}
+async function checkAI(fresh){
+  aiHealth=null;
+  if(backendReady()){
+    try{
+      const ctl=new AbortController(); const to=setTimeout(()=>ctl.abort(),40000);
+      const r=await fetch(BACKEND_URL+(BACKEND_URL.indexOf('?')<0?'?':'&')+'action=health'+(fresh?'&fresh=1':'')+'&_='+Date.now(),{signal:ctl.signal});
+      clearTimeout(to);
+      aiHealth=await r.json();
+    }catch(e){ aiHealth={unreachable:true,error:String(e&&e.message||e)}; }
+  }
+  updateAIPill();
+  if(document.getElementById('aiModal').classList.contains('show')) renderAIStatus();
+}
+function openAIStatus(){document.getElementById('aiModal').classList.add('show');renderAIStatus(); if(!aiHealth) checkAI(false)}
+function closeAIStatus(){document.getElementById('aiModal').classList.remove('show')}
+function renderAIStatus(){
+  const rows=[]; const R=(ic,t,sm)=>rows.push('<div class="row"><div class="ic">'+ic+'</div><div><b>'+t+'</b>'+(sm?'<small>'+esc(sm)+'</small>':'')+'</div></div>');
+  const h=aiHealth;
+  if(!backendReady()) R('🔴','Backend URL not set','Paste your Apps Script Web App URL into BACKEND_URL at the top of index.html.');
+  else if(!h) R('⏳','Testing the AI models…','This can take up to ~30 seconds the first time.');
+  else if(h.unreachable) R('🔴','Cannot reach the backend','Check that the Web App is deployed as “Anyone” and that BACKEND_URL is the latest /exec URL (re-deploy → New version after editing Code.gs). '+h.error);
+  else if(h.ok===false) R('🔴','Backend replied with an error',h.error||'');
+  else{
+    R(h.connected?'🟢':'🔴',h.connected?'AI is connected ('+h.working+' of '+Object.keys(h.providers||{}).length+' providers working)':'No AI provider is answering','Checked '+(h.time?new Date(h.time).toLocaleString():'')+(h.cached?' (cached ≤5 min)':''));
+    Object.keys(h.providers||{}).forEach(k=>{const p=h.providers[k];
+      R(p.ok?'✅':(p.configured?'❌':'⚪'),p.label,p.ok?('Model: '+p.model+' · '+p.ms+' ms'):p.error);});
+    R(h.sheet&&h.sheet.ok?'📗':'📕','Google Sheet knowledge',h.sheet&&h.sheet.ok?(h.kb.topics+' topics · '+h.kb.rules+' rule blocks · v'+h.kb.version):((h.sheet&&h.sheet.error)||'Not readable — check SHEET_ID and run SETUP_KB_SHEET'));
+  }
+  if(aiState.status==='ok') R('💬','Last answer','From '+aiState.source+(aiState.model?' ('+aiState.model+')':'')+' in '+(aiState.ms/1000).toFixed(1)+' s');
+  if(aiState.status==='fail') R('💬','Last question got no AI answer',Object.keys(aiState.errors).map(k=>k+': '+aiState.errors[k]).join(' | '));
+  document.getElementById('aiRows').innerHTML=rows.join('');
+  document.getElementById('aiWhen').textContent=adminMode?'Admin view — only visible on browsers opened with ?admin':'';
+}
+
+const CUSTOM_SETS={};          // guides defined from the sheet's Steps column
+
+/* ============================================================
+   VISUAL GUIDE — real operating-system screens
+   Each flow is a list of steps; each step draws one genuine-looking
+   screen (iOS, Android, Windows, macOS) and highlights what to tap.
+   ============================================================ */
+const CERT_FILE_APPLE='clientlegacy.p12';   // file used on iPhone/iPad and Mac
+const CERT_FILE_WIN  ='client.p12';         // file used on Windows and Android
+const HL=' data-hl="1"';
+const SSID='GMU-Students';
+const PH=(t)=>'<span style="color:#8c98a5">'+t+'</span>';
+
+/* ---------------- shared web pages (Moodle) ---------------- */
+function webVars(os){
+  return (os==='ios'||os==='android')
+    ?'--wh:58px;--cm:22px;--cp:22px;--fs:15px;--h2:21px;--fp:11px;--fh:44px;--ch:54px'
+    :'--wh:80px;--cm:60px;--cp:40px;--fs:21px;--h2:34px;--fp:15px;--fh:58px;--ch:110px';
+}
+function webHdr(){return '<div class="hdr"><i>GMU</i>Gulf Medical University · Moodle</div>'}
+function webLogin(os,o){
+  o=o||{};
+  return '<div class="web" style="'+webVars(os)+'">'+webHdr()+'<div class="card"><h2>Log in to your account</h2>'+
+   '<label>Username</label><div class="fi"'+(o.hl==='user'?HL:'')+'>'+(o.user?'2026mip39':PH('Student number'))+'</div>'+
+   '<label>Password</label><div class="fi">'+(o.pass?'••••••••••':PH('Password'))+'</div>'+
+   '<div class="wbtn"'+(o.hl==='btn'?HL:'')+'>Log in</div>'+
+   '<a class="lnk"'+(o.hl==='forgot'?HL:'')+'>Forgotten your password?</a></div></div>';
+}
+function webForgot(os,o){
+  o=o||{};
+  return '<div class="web" style="'+webVars(os)+'">'+webHdr()+'<div class="card"><h2>Forgotten your password?</h2>'+
+   '<div style="font-size:var(--fs);line-height:1.5;color:#44546a">To reset your password, search using your <b>registration number only</b>.</div>'+
+   '<label>Search by username</label><div class="fi"'+(o.hl==='field'?HL:'')+'>'+(o.val?'2026mip39':PH('Registration number'))+'</div>'+
+   '<div class="wbtn"'+(o.hl==='search'?HL:'')+'>Search</div></div></div>';
+}
+function webSent(os){
+  return '<div class="web" style="'+webVars(os)+'">'+webHdr()+'<div class="card"><h2>Password reset</h2>'+
+   '<div style="font-size:var(--fs);line-height:1.6">✅ If you supplied a correct username, an <b>email has been sent</b> to your University email with instructions to set a new password.</div>'+
+   '<div class="wbtn" style="background:#44546a">Continue</div></div></div>';
+}
+function webDash(os){
+  return '<div class="web" style="'+webVars(os)+'">'+webHdr()+
+   '<div style="padding:var(--cm) 5% 0;font-size:var(--h2);font-weight:700;color:#003057">Dashboard</div>'+
+   '<div class="crs"><div><i></i><span>Anatomy I</span></div><div><i style="background:linear-gradient(135deg,#C9A227,#a7851c)"></i><span>Physiology</span></div><div><i style="background:linear-gradient(135deg,#5b6bbf,#34408a)"></i><span>Biochemistry</span></div></div></div>';
+}
+
+/* ==================== iOS building blocks ==================== */
+function iSB(w){return '<div class="sb'+(w?' w':'')+'"><span>9:41</span><span>📶 🔋</span></div><div class="isl"></div>'}
+function iNav(l,t,r,hl){
+  return '<div class="nav"><span'+(hl==='l'?HL:'')+'>'+l+'</span><b>'+t+'</b><span class="bold"'+(hl==='r'?HL:'')+'>'+r+'</span></div>';
+}
+function iPage(nav,body,w){return '<div class="gscr ios"><div class="bg"></div>'+iSB(w)+nav+'<div class="body">'+body+'</div><div class="home"></div></div>'}
+function iHome(hl){
+  const apps=[['Mail','#1a8cff','✉️'],['Files','#3a9bf5','📁'],['Settings','#8e8e93','⚙️'],['Safari','#fff','🧭'],['Messages','#34c759','💬'],['Photos','#fff','🌸'],['Camera','#555','📷'],['Calendar','#fff','📅'],['Notes','#ffd60a','📝'],['Maps','#4cd964','🗺️'],['Clock','#111','🕘'],['Wallet','#111','💳']];
+  return '<div class="gscr ios"><div class="wall"></div>'+iSB(1)+'<div class="apps">'+
+   apps.map(a=>'<div class="app"><div class="ic" style="background:'+a[1]+'"'+(a[0]===hl?HL:'')+'>'+a[2]+'</div>'+a[0]+'</div>').join('')+'</div>'+
+   '<div class="dock">'+['📞','🧭','💬','🎵'].map(x=>'<div class="ic" style="background:rgba(255,255,255,.8)">'+x+'</div>').join('')+'</div><div class="home w"></div></div>';
+}
+function iMailCompose(){
+  return iPage(iNav('Cancel','New Message','<span style="background:#007aff;color:#fff;border-radius:50%;width:32px;height:32px;display:inline-grid;place-items:center">↑</span>','r'),
+   '<div style="background:#fff;height:100%;padding:0 16px;font-size:17px">'+
+   '<div class="li" style="padding:0"><span style="color:#8a8a8e">To:</span>&nbsp; identity@gmu.ac.ae</div>'+
+   '<div class="li" style="padding:0"><span style="color:#8a8a8e">Cc/Bcc, From:</span>&nbsp; 2026mip39@mygmu.ac.ae</div>'+
+   '<div class="li" style="padding:0"><span style="color:#8a8a8e">Subject:</span>&nbsp; <b>LMS access</b></div>'+
+   '<div style="padding-top:16px;line-height:1.5;color:#222">Dear Support,<br>Kindly issue my LMS access certificate.<br><br>Name: …<br>Student number: 2026mip39<br>Programme: …</div></div>');
+}
+function iMailInbox(){
+  const r=(f,s,p,hl,dot)=>'<div class="mail-row"'+(hl?HL:'')+'>'+(dot?'<span class="dot"></span>':'')+'<b>'+f+'</b><div style="font-size:16px">'+s+'</div><div style="color:#8a8a8e;font-size:15px">'+p+'</div></div>';
+  return iPage(iNav('‹ Mailboxes','Inbox','Edit'),
+   r('identity@gmu.ac.ae','Controlled System Access 📎','Your certificate and its password are attached…',1,1)+
+   r('Moodle','Your course is now available','Anatomy I has been released…',0,0)+
+   r('Student Affairs','Orientation schedule','Please find the schedule below…',0,0));
+}
+function iMailOpen(){
+  return iPage(iNav('‹ Inbox','',''),
+   '<div style="background:#fff;height:100%;padding:16px;font-size:16px;line-height:1.45"><div style="font-size:22px;font-weight:700">Controlled System Access</div>'+
+   '<div style="color:#8a8a8e;margin:4px 0 14px">identity@gmu.ac.ae · to me</div>'+
+   'Dear Student,<br>Your certificate file is attached.<br><b>Password:</b> ●●●●●●●●<br><span style="color:#c0392b">Personal — do not share or forward.</span>'+
+   '<div class="attach"'+HL+'><div class="f">P12</div><div><b>'+CERT_FILE_APPLE+'</b><div style="color:#8a8a8e;font-size:14px">3 KB</div></div></div></div>');
+}
+function iShare(){
+  return '<div class="gscr ios"><div class="bg" style="background:#fff"></div>'+iSB()+'<div class="dim"></div>'+
+   '<div class="sheet" style="z-index:4;height:560px"><div style="display:flex;gap:12px;align-items:center;padding:16px;background:#fff;margin:14px;border-radius:12px"><div class="attach" style="margin:0;border:none;padding:0"><div class="f">P12</div></div><div><b>'+CERT_FILE_APPLE+'</b><div style="color:#8a8a8e;font-size:14px">Personal Information Exchange · 3 KB</div></div></div>'+
+   '<div style="display:flex;gap:18px;padding:4px 18px 14px;font-size:12px;text-align:center">'+['AirDrop','Messages','Mail','Notes'].map(a=>'<div><div class="ic" style="width:60px;height:60px;border-radius:14px;background:#e5e5ea;font-size:28px;margin-bottom:4px">📤</div>'+a+'</div>').join('')+'</div>'+
+   '<div class="grp" style="margin-top:6px"><div class="li">Copy<span class="ch">⧉</span></div><div class="li"'+HL+'>Save to Files<span class="ch">📁</span></div><div class="li">Print<span class="ch">🖨</span></div><div class="li">Open in…<span class="ch">⤴</span></div></div></div><div class="home"></div></div>';
+}
+function iSaveFiles(){
+  return iPage(iNav('Cancel','Save','Save','r'),
+   '<div class="hd" style="margin-top:14px">Locations</div><div class="grp"><div class="li"><span class="si" style="background:#3a9bf5">☁️</span>iCloud Drive<span class="ch">›</span></div><div class="li" style="background:#e8f1ff"><span class="si" style="background:#8e8e93">📱</span><b>On My iPhone</b><span class="ch" style="color:#007aff">✓</span></div></div>'+
+   '<div class="hd">Saving</div><div class="grp"><div class="li">'+CERT_FILE_APPLE+'</div></div>');
+}
+function iFiles(hl){
+  return iPage(iNav('‹ Browse','On My iPhone','Select'),
+   '<div style="padding:22px 16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px"><div style="text-align:center;font-size:13px"'+(hl===false?'':HL)+'><div style="background:#fff;height:96px;border-radius:12px;display:grid;place-items:center;font-weight:700;color:#4a6fa5;font-size:20px;box-shadow:0 1px 4px rgba(0,0,0,.15)">P12</div>'+CERT_FILE_APPLE+'<div style="color:#8a8a8e">3 KB</div></div>'+
+   '<div style="text-align:center;font-size:13px"><div style="font-size:70px">📁</div>Pages</div><div style="text-align:center;font-size:13px"><div style="font-size:70px">📁</div>Numbers</div></div>');
+}
+function iFilesAlert(){
+  return iFiles(false).replace('<div class="home"></div></div>','<div class="dim"></div><div class="alert"><h4>Profile Downloaded</h4><p>Review the profile in the Settings app if you want to install it.</p><div class="ab"'+HL+'>Close</div></div><div class="home"></div></div>');
+}
+function iSettings(hl){
+  hl=hl||'general';
+  const s=(c,i,t,hl)=>'<div class="li"'+(hl?HL:'')+'><span class="si" style="background:'+c+'">'+i+'</span>'+t+'<span class="ch">›</span></div>';
+  return iPage('<div class="nav" style="justify-content:flex-start"><b style="font-size:30px;margin-left:4px">Settings</b></div>',
+   '<div class="grp"><div class="li" style="min-height:66px"><span class="si" style="background:#8e8e93;border-radius:50%;width:48px;height:48px">👤</span><div><b>Your Name</b><div style="font-size:13px;color:#8a8a8e">Apple ID, iCloud, Media &amp; Purchases</div></div></div></div>'+
+   '<div class="grp">'+s('#ff9500','✈️','Airplane Mode')+s('#007aff','📶','Wi-Fi',hl==='wifi')+s('#007aff','🔵','Bluetooth')+'</div>'+
+   '<div class="grp">'+s('#ff3b30','🔔','Notifications')+s('#8e8e93','⚙️','General',hl==='general')+s('#8e8e93','🎛','Control Center')+s('#007aff','☀️','Display &amp; Brightness')+'</div>');
+}
+function iGeneral(){
+  const s=(t,hl)=>'<div class="li"'+(hl?HL:'')+'>'+t+'<span class="ch">›</span></div>';
+  return iPage(iNav('‹ Settings','General',''),
+   '<div class="grp">'+s('About')+s('Software Update')+'</div><div class="grp">'+s('AirDrop')+s('AirPlay &amp; Continuity')+'</div>'+
+   '<div class="grp">'+s('Date &amp; Time')+s('Keyboard')+s('Language &amp; Region')+'</div><div class="grp">'+s('VPN &amp; Device Management',1)+s('Legal &amp; Regulatory')+'</div>');
+}
+function iVPN(){
+  return iPage(iNav('‹ General','VPN &amp; Device Management',''),
+   '<div class="hd">Downloaded Profile</div><div class="grp"><div class="li"'+HL+'><span class="si" style="background:#8e8e93">⚙️</span><div><b>identity certificate</b><div style="font-size:13px;color:#8a8a8e">GMU</div></div><span class="ch">›</span></div></div>');
+}
+function iInstall(second){
+  return iPage(iNav('Cancel','Install Profile','Install','r'),
+   '<div class="grp"><div style="padding:18px 16px;text-align:center"><div style="font-size:40px">🔏</div><b>identity certificate</b><div style="color:#c0392b;font-size:14px;margin-top:4px">Not Signed</div></div>'+
+   '<div class="li"><span>Contains</span><span class="val">Certificate</span></div><div class="li"><span>Issued to</span><span class="val">Your name</span></div></div>'+
+   (second?'<div style="margin:0 24px;font-size:13px;color:#6d6d72;line-height:1.4">Installing this certificate allows this iPhone to open the GMU Moodle login page.</div>':''));
+}
+function iPasscode(){
+  const k=['1','2','3','4','5','6','7','8','9','','0','⌫'];
+  return '<div class="gscr ios"><div class="wall" style="background:#10161f"></div>'+iSB(1)+
+   '<div style="position:absolute;top:130px;left:0;right:0;text-align:center;color:#fff;font-size:20px">Enter Passcode<div style="margin-top:22px;letter-spacing:14px;font-size:26px">○ ○ ○ ○ ○ ○</div></div>'+
+   '<div style="position:absolute;top:300px;left:50%;margin-left:-135px;display:grid;grid-template-columns:repeat(3,78px);gap:14px 16px"'+HL+'>'+k.map(x=>'<div class="key" style="'+(x===''?'visibility:hidden':'')+'">'+x+'</div>').join('')+'</div><div class="home w"></div></div>';
+}
+function iCertPassword(){
+  return '<div class="gscr ios"><div class="bg"></div>'+iSB()+iNav('Cancel','Install Profile','')+'<div class="dim"></div>'+
+   '<div class="alert" style="top:30%"><h4>Enter Password</h4><p>Enter the password for “identity certificate”. Paste it from the email.</p><div class="field">●●●●●●●●●●</div><div class="row2"><div class="ab" style="font-weight:400">Cancel</div><div class="ab"'+HL+'>Next</div></div></div><div class="home"></div></div>';
+}
+function iInstalled(){
+  return iPage(iNav('','Profile Installed','Done','r'),
+   '<div class="grp"><div style="padding:22px 16px;text-align:center"><div style="font-size:44px">✅</div><b>identity certificate</b><div style="color:#2e8b57;font-size:14px;margin-top:4px">Installed</div></div></div>');
+}
+function iRestart(){
+  return '<div class="gscr ios"><div class="wall" style="background:#0b0d12"></div>'+iSB(1)+
+   '<div style="position:absolute;top:200px;left:0;right:0;text-align:center;color:#fff;font-size:20px">Restart your iPhone</div>'+
+   '<div style="position:absolute;top:290px;left:24px;right:24px;height:76px;border-radius:38px;background:rgba(255,255,255,.18);color:#fff;display:flex;align-items:center;padding:0 8px;font-size:19px"'+HL+'><span style="width:60px;height:60px;border-radius:50%;background:#fff;color:#d00;display:grid;place-items:center;font-size:26px">⏻</span><span style="margin:0 auto">slide to power off</span></div>'+
+   '<div style="position:absolute;top:400px;left:0;right:0;text-align:center;color:#9aa5b1;font-size:15px">then hold the side button to turn it back on</div><div class="home w"></div></div>';
+}
+function iSafari(inner,hlUrl){
+  return '<div class="gscr ios"><div class="bg" style="background:#fff"></div>'+iSB()+
+   '<div style="position:absolute;left:0;right:0;top:54px;bottom:122px;overflow:hidden">'+inner+'</div>'+
+   '<div class="tool"></div><div class="urlbar"'+(hlUrl?HL:'')+'>🔒&nbsp; lms.gmu.ac.ae/moodle &nbsp;↻</div><div class="home"></div></div>';
+}
+
+/* ==================== Android building blocks ==================== */
+function aSB(w){return '<div class="sb'+(w?' w':'')+'"><span>9:41</span><span>📶 🔋 100%</span></div><div class="cam"></div>'}
+function aPage(bar,body,w){return '<div class="gscr and"><div class="bg"></div>'+aSB(w)+bar+'<div class="body">'+body+'</div><div class="nav"></div></div>'}
+function aTB(t,right,hl){return '<div class="tb"><span>←</span><span class="ti">'+t+'</span><span'+(hl?HL:'')+'>'+right+'</span></div>'}
+function aHome(hl){
+  const apps=[['Gmail','#fff','📧'],['Chrome','#fff','🌐'],['Files','#1a73e8','📁'],['Settings','#5f6368','⚙️'],['Photos','#fff','🌸'],['Camera','#333','📷'],['Maps','#fff','🗺️'],['YouTube','#fff','▶️']];
+  return '<div class="gscr and"><div class="wall"></div>'+aSB(1)+'<div class="apps">'+
+   apps.map(a=>'<div class="app"><div class="ic" style="background:'+a[1]+'"'+(a[0]===hl?HL:'')+'>'+a[2]+'</div>'+a[0]+'</div>').join('')+'</div>'+
+   '<div class="gsearch"><b style="color:#4285f4">G</b> Search</div><div class="nav w"></div></div>';
+}
+function aCompose(){
+  return aPage(aTB('Compose','<span style="font-size:24px;color:#1a73e8">➤</span>',1),
+   '<div class="fl"><small>From</small>2026mip39@mygmu.ac.ae</div><div class="fl"><small>To</small>identity@gmu.ac.ae</div><div class="fl"><b>LMS access</b></div>'+
+   '<div class="fl" style="border:none;line-height:1.5;padding-top:16px">Dear Support,<br>Kindly issue my LMS access certificate.<br><br>Name: …<br>Student number: 2026mip39</div>');
+}
+function aInbox(){
+  const r=(a,f,s,p,hl)=>'<div class="mrow"'+(hl?HL:'')+'><div class="av" style="background:'+a+'">'+f[0].toUpperCase()+'</div><div><b>'+f+'</b><div>'+s+'</div><div style="color:#6b6b72;font-size:14px">'+p+'</div></div></div>';
+  return aPage('<div class="tb"><span>☰</span><span class="ti" style="background:#ece6f0;border-radius:24px;padding:10px 16px;font-size:16px">Search in mail</span></div>',
+   '<div style="font-size:13px;color:#6b6b72;padding:6px 16px">Primary</div>'+
+   r('#1a73e8','identity@gmu.ac.ae','Controlled System Access 📎','Your certificate and its password…',1)+r('#0b8043','Moodle','Your course is now available','Anatomy I has been released…',0)+r('#c5221f','Student Affairs','Orientation schedule','Please find the schedule below…',0));
+}
+function aMailOpen(){
+  return aPage(aTB('','⋮'),
+   '<div style="padding:8px 18px"><div style="font-size:22px">Controlled System Access</div><div style="color:#6b6b72;font-size:14px;margin:6px 0 14px">identity@gmu.ac.ae · to me</div>Dear Student,<br>Your certificate file is attached.<br><b>Password:</b> ●●●●●●●●<br><span style="color:#c0392b">Personal — do not share.</span></div>'+
+   '<div class="att"'+HL+'><div class="f">P12</div><div><b>'+CERT_FILE_WIN+'</b><div style="color:#6b6b72;font-size:13px">3 KB</div></div><span style="margin-left:auto;font-size:22px">⬇</span></div>');
+}
+function aFiles(toast){
+  return aPage('<div class="tb"><span>☰</span><span class="ti">Downloads</span><span>⋮</span></div>',
+   '<div class="fl"'+(toast?'':HL)+' style="display:flex;gap:14px;align-items:center"><div class="att" style="margin:0;padding:0;border:none"><div class="f">P12</div></div><div><b>'+CERT_FILE_WIN+'</b><small>3 KB · today</small></div></div>'+
+   '<div class="fl" style="display:flex;gap:14px;align-items:center"><div class="att" style="margin:0;padding:0;border:none"><div class="f" style="background:#d2e3fc;color:#1a56b8">PDF</div></div><div><b>Orientation.pdf</b><small>1.2 MB</small></div></div>'+
+   (toast?'<div style="position:absolute;left:24px;right:24px;bottom:90px;background:#322f35;color:#fff;border-radius:6px;padding:14px 16px;font-size:15px">✅ identity certificate installed</div>':''));
+}
+function aExtract(){
+  return '<div class="gscr and"><div class="bg"></div>'+aSB()+'<div class="scrim"></div><div class="dlg"><h4>Extract certificate</h4><div style="font-size:15px;color:#49454f">Enter the password to extract the certificates. Paste it from the email.</div><div class="in">●●●●●●●●●●</div><div class="acts"><span>Cancel</span><span'+HL+' style="background:#e8def8">OK</span></div></div><div class="nav"></div></div>';
+}
+function aName(){
+  return '<div class="gscr and"><div class="bg"></div>'+aSB()+'<div class="scrim"></div><div class="dlg"><h4>Name this certificate</h4><div style="font-size:14px;color:#6b6b72">Certificate name</div><div class="in">identity certificate</div><div style="font-size:14px;color:#6b6b72;margin-top:14px">Credential use</div><div class="in" style="border-bottom:2px solid #79747e">VPN and apps ▾</div><div class="acts"><span>Cancel</span><span'+HL+' style="background:#e8def8">OK</span></div></div><div class="nav"></div></div>';
+}
+function aRestart(){
+  return '<div class="gscr and"><div class="wall"></div>'+aSB(1)+'<div class="scrim" style="background:rgba(0,0,0,.55)"></div>'+
+   '<div style="position:absolute;right:22px;top:80px;width:240px;background:#2b2930;color:#fff;border-radius:28px;padding:10px;z-index:6;font-size:17px"><div style="padding:16px 18px">⏻&nbsp; Power off</div><div style="padding:16px 18px;border-radius:20px;background:#4a4458"'+HL+'>🔄&nbsp; Restart</div><div style="padding:16px 18px">🚨&nbsp; Emergency</div></div><div class="nav w"></div></div>';
+}
+function aChrome(inner,hlUrl){
+  return '<div class="gscr and"><div class="bg" style="background:#fff"></div>'+aSB()+
+   '<div class="chrome"><div class="url"'+(hlUrl?HL:'')+'>🔒 lms.gmu.ac.ae/moodle</div><span style="font-size:22px">⋮</span></div>'+
+   '<div style="position:absolute;left:0;right:0;top:102px;bottom:0;overflow:hidden">'+inner+'</div><div class="nav"></div></div>';
+}
+
+/* ==================== Windows building blocks ==================== */
+function wTask(apps){
+  return '<div class="tbar"><span>🪟</span><span>🔍</span>'+(apps||['🌐','📁','✉️']).map((a,i)=>'<span class="'+(i===0?'act':'')+'">'+a+'</span>').join('')+
+   '<div class="clk">9:41 AM<br>22/11/2026</div></div>';
+}
+function wWnd(title,x,y,w,h,body){
+  return '<div class="wnd" style="left:'+x+'px;top:'+y+'px;width:'+w+'px;height:'+h+'px"><div class="wt">'+title+'<div class="ctl"><i>–</i><i>☐</i><i>✕</i></div></div><div class="wb">'+body+'</div></div>';
+}
+function wChrome(url,tab,body,hlUrl){
+  return '<div class="gscr win"><div class="desk"></div><div class="wnd" style="left:0;top:0;right:0;bottom:52px;border-radius:0;border:none">'+
+   '<div class="wt" style="background:#dee1e6;height:42px;padding:6px 0 0 10px"><div style="background:#fff;padding:9px 18px;border-radius:9px 9px 0 0;font-size:16.9px">'+tab+' ✕</div><div class="ctl"><i>–</i><i>☐</i><i>✕</i></div></div>'+
+   '<div style="height:48px;background:#fff;display:flex;align-items:center;padding:0 16px;gap:16px;border-bottom:1px solid #dadce0;font-size:22.1px;flex-shrink:0"><span>←</span><span>→</span><span>↻</span>'+
+   '<div style="flex:1;background:#f1f3f4;border-radius:22px;padding:9px 18px;font-size:19.5px"'+(hlUrl?HL:'')+'>🔒 '+url+'</div><span>⋮</span></div>'+
+   '<div class="wb">'+body+'</div></div>'+wTask()+'</div>';
+}
+function gmailBody(kind,file,os){
+  const mac=os==='mac';
+  const top='<div style="height:64px;background:#f6f8fc;display:flex;align-items:center;gap:22px;padding:0 24px"><span style="font-size:28.6px">☰</span><b style="font-size:28.6px;color:#c5221f">M <span style="color:#444;font-weight:400">Gmail</span></b><div style="flex:1;max-width:640px;background:#eaf1fb;border-radius:24px;padding:12px 20px;color:#5f6368;font-size:19.5px">Search mail</div></div>';
+  const rail='<div style="position:absolute;left:0;top:64px;bottom:0;width:200px;padding:6px 14px;font-size:18.2px;line-height:2.4;color:#444"><div style="background:#c2e7ff;border-radius:16px;padding:14px 20px;font-weight:600;line-height:1.2;margin-bottom:12px;color:#001d35">✏️ Compose</div>📥 Inbox<br>⭐ Starred<br>📤 Sent<br>📝 Drafts</div>';
+  let main='';
+  if(kind==='compose'){
+    main='<div style="position:absolute;left:210px;top:64px;right:0;bottom:0;background:#fff;border-radius:16px 0 0 0;font-size:18.2px;color:#aaa;padding:14px 20px">Inbox — 3 new messages</div>'+
+     '<div style="position:absolute;right:48px;bottom:0;width:560px;height:430px;background:#fff;border-radius:12px 12px 0 0;box-shadow:0 8px 40px rgba(0,0,0,.4);font-size:19.5px;display:flex;flex-direction:column;z-index:5">'+
+     '<div style="background:#404040;color:#fff;padding:10px 16px;border-radius:12px 12px 0 0;font-weight:600">New Message</div>'+
+     '<div style="padding:10px 16px;border-bottom:1px solid #eee;color:#222"><span style="color:#777">To&nbsp;</span> identity@gmu.ac.ae</div>'+
+     '<div style="padding:10px 16px;border-bottom:1px solid #eee"><b>LMS access</b></div>'+
+     '<div style="padding:16px;line-height:1.55;flex:1;color:#222">Dear Support,<br>Kindly issue my LMS access certificate.<br><br>Name: …<br>Student number: 2026mip39<br>Programme: …</div>'+
+     '<div style="padding:12px 16px"><span style="background:#0b57d0;color:#fff;border-radius:18px;padding:10px 28px;font-weight:600"'+HL+'>Send</span></div></div>';
+  } else {
+    main='<div style="position:absolute;left:210px;top:64px;right:0;bottom:0;background:#fff;border-radius:16px 0 0 0;padding:26px 36px;font-size:19.5px;line-height:1.6;color:#222">'+
+     '<div style="font-size:31.2px;margin-bottom:6px">Controlled System Access</div><div style="color:#666;margin-bottom:18px"><b>identity@gmu.ac.ae</b> · to me</div>'+
+     'Dear Student,<br>Your certificate file is attached.<br><b>Password:</b> ●●●●●●●● &nbsp;<span style="color:#c0392b">(personal — do not share or forward)</span>'+
+     '<div style="display:flex;align-items:center;gap:14px;border:1px solid #dadce0;border-radius:10px;width:300px;padding:12px 14px;margin-top:28px"'+HL+'><div style="width:44px;height:44px;background:#e8def8;border-radius:8px;display:grid;place-items:center;font-weight:700;font-size:15.6px;color:#4f378b">P12</div><div><b>'+file+'</b><div style="color:#777;font-size:16.9px">3 KB · click to download</div></div></div></div>';
+  }
+  return '<div style="position:absolute;inset:0;background:#f6f8fc;font-family:Roboto,Arial,sans-serif">'+top+rail+main+'</div>';
+}
+function wExplorer(){
+  const row=(n,t,s,sel)=>'<div class="fx'+(sel?' sel':'')+'"'+(sel?HL:'')+'><span style="width:430px">'+(n==='folder'?'📁 ':'📄 ')+t+'</span><span style="width:230px;color:#666">22/11/2026 9:38 AM</span><span style="width:230px;color:#666">'+s+'</span></div>';
+  return '<div class="gscr win"><div class="desk"></div>'+wWnd('📁 Downloads',90,40,1100,640,
+   '<div style="height:46px;border-bottom:1px solid #e5e5e5;display:flex;align-items:center;gap:12px;padding:0 16px;color:#444"><span>←</span><span>→</span><div style="flex:1;border:1px solid #d0d0d0;padding:6px 12px;border-radius:5px">This PC › Downloads</div></div>'+
+   '<div style="display:flex;height:calc(100% - 46px)"><div style="width:210px;border-right:1px solid #eee;padding:14px;line-height:2.1;color:#333">⭐ Quick access<br>🖥 Desktop<br><b>⬇ Downloads</b><br>📄 Documents<br>🖼 Pictures</div><div style="flex:1;font-size:16.9px;color:#555"><div class="fx" style="color:#777;border-bottom:1px solid #eee"><span style="width:430px">Name</span><span style="width:230px">Date modified</span><span style="width:230px">Type</span></div>'+
+   row('f',CERT_FILE_WIN,'Personal Information Exchange',1)+row('f','Orientation.pdf','Microsoft Edge PDF Document',0)+row('f','Timetable.xlsx','Microsoft Excel Worksheet',0)+'</div></div>')+wTask(['📁','🌐','✉️'])+'</div>';
+}
+function wWizard(step){
+  const pages={
+   1:['Welcome to the Certificate Import Wizard','This wizard helps you copy certificates from your disk to a certificate store.<br><br><b>Store Location</b><br>&nbsp;(●) Current User<br>&nbsp;(○) Local Machine<br><br>To continue, click Next.','Next'],
+   2:['File to Import','Specify the file you want to import.<br><br><b>File name:</b><div class="inp" style="margin-top:6px">C:\\Users\\Student\\Downloads\\'+CERT_FILE_WIN+'</div>','Next'],
+   3:['Private key protection','To maintain security, the private key was protected with a password.<br><br><b>Password:</b><div class="inp" style="margin:6px 0 12px">●●●●●●●●●●</div>☑ Include all extended properties<br>☐ Mark this key as exportable','Next'],
+   4:['Certificate Store','Certificate stores are system areas where certificates are kept.<br><br>(○) Automatically select the certificate store<br>(●) Place all certificates in the following store<div class="inp" style="margin-top:8px;width:340px">Personal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▾</div>','Next'],
+   5:['Completing the Certificate Import Wizard','The certificate will be imported after you click Finish.<br><br>Certificate Store Selected: <b>Personal</b><br>Content: <b>PFX</b><br>File Name: <b>'+CERT_FILE_WIN+'</b>','Finish']
+  }[step];
+  return '<div class="gscr win"><div class="desk"></div>'+wWnd('🔐 Certificate Import Wizard',320,70,640,520,
+   '<div class="wiz"><h3>'+pages[0]+'</h3><div style="line-height:1.55">'+pages[1]+'</div><div class="foot"><span class="btn pri"'+HL+'>'+pages[2]+'</span><span class="btn">Cancel</span></div></div>')+wTask(['📁','🌐','✉️'])+'</div>';
+}
+function wSuccess(){
+  return '<div class="gscr win"><div class="desk"></div>'+wWnd('Certificate Import Wizard',420,230,440,200,
+   '<div style="padding:30px 26px;display:flex;gap:16px;align-items:center;font-size:19.5px"><span style="font-size:46.8px">ℹ️</span>The import was successful.</div><div style="position:absolute;right:20px;bottom:18px"><span class="btn pri"'+HL+'>OK</span></div>')+wTask(['📁','🌐','✉️'])+'</div>';
+}
+
+/* ==================== macOS building blocks ==================== */
+function mDesk(app,inner){
+  return '<div class="gscr mac"><div class="desk"></div><div class="menu"><span>🍎</span><b>'+app+'</b><span>File</span><span>Edit</span><span>View</span><span>Window</span><span>Help</span><div class="r"><span>🔋</span><span>📶</span><span>Sun 22 Nov&nbsp; 9:41 AM</span></div></div>'+inner+
+   '<div class="dock"><span>🗂</span><span>🧭</span><span>✉️</span><span>🔑</span><span>⚙️</span><span>🗑</span></div></div>';
+}
+function mWnd(title,x,y,w,h,body,o){
+  o=o||{};
+  const t=o.pill?'<span style="margin:0 auto;background:#fff;border-radius:7px;padding:5px 90px;font-weight:400"'+(o.hl?HL:'')+'>'+title+'</span>':'<span style="margin:0 auto">'+title+'</span>';
+  return '<div class="wnd" style="left:'+x+'px;top:'+y+'px;width:'+w+'px;height:'+h+'px"><div class="wt"><div class="tl"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>'+t+'<span style="width:50px"></span></div><div class="wb">'+body+'</div></div>';
+}
+function mSafari(url,body,hlUrl){
+  return mDesk('Safari',mWnd('🔒 '+url,60,50,1160,610,body,{pill:true,hl:hlUrl}));
+}
+function mFinderWnd(hl){
+  const row=(n,sel)=>'<div style="display:flex;padding:7px 18px;font-size:18.2px;'+(sel?'background:#0a84ff;color:#fff':'')+'"'+(sel&&hl?HL:'')+'><span style="width:430px">'+n+'</span><span style="width:200px;opacity:.8">Today, 9:38 AM</span><span style="opacity:.8">3 KB</span></div>';
+  return mWnd('📁 Downloads',150,60,980,560,'<div style="display:flex;height:100%"><div style="width:190px;background:#e8e8ed;padding:16px;line-height:2.1;font-size:17.6px;color:#444">Favourites<br>🖥 Desktop<br>📄 Documents<br><b>⬇ Downloads</b><br>🏠 Home</div><div style="flex:1;padding-top:6px"><div style="display:flex;padding:6px 18px;font-size:15.6px;color:#777;border-bottom:1px solid #eee"><span style="width:430px">Name</span><span style="width:200px">Date Modified</span><span>Size</span></div>'+row(CERT_FILE_APPLE,1)+row('Orientation.pdf')+row('Timetable.xlsx')+'</div></div>');
+}
+function mFinder(){return mDesk('Finder',mFinderWnd(true))}
+function mKeyPwd(){
+  return mDesk('Keychain Access',mFinderWnd(false)+
+   '<div class="sheetd" style="left:430px;top:180px;width:420px"><div style="font-size:19.5px;font-weight:700;margin-bottom:6px">Enter the password for “'+CERT_FILE_APPLE+'”:</div><div style="font-size:16.2px;color:#555;margin-bottom:12px">Paste the password from the email (no extra spaces).</div><div class="inp" style="margin-bottom:18px">Password: ●●●●●●●●●●</div><div style="display:flex;justify-content:flex-end;gap:10px"><span class="btn">Cancel</span><span class="btn pri"'+HL+'>OK</span></div></div>');
+}
+function mKeychain(){
+  const r=(n,k,x,sel,ic)=>'<div style="display:flex;padding:8px 14px;font-size:17.6px;'+(sel?'background:#0a84ff;color:#fff':'')+'"'+(sel?HL:'')+'><span style="width:380px">'+ic+' '+n+'</span><span style="width:160px">'+k+'</span><span style="width:160px">'+x+'</span><span>login</span></div>';
+  return mDesk('Keychain Access',mWnd('Keychain Access',130,50,1020,600,
+   '<div style="display:flex;height:100%"><div style="width:200px;background:#e8e8ed;padding:14px;font-size:16.9px;line-height:2;color:#444"><span style="color:#888;font-size:14.3px">Default Keychains</span><br><b style="background:#c9d6ea;padding:2px 8px;border-radius:5px">🔑 login</b><br>🔑 Local Items<br><span style="color:#888;font-size:14.3px">System Keychains</span><br>🔒 System<br>🔒 System Roots</div>'+
+   '<div style="flex:1"><div style="padding:10px 14px;border-bottom:1px solid #ddd;font-size:16.9px;color:#555">All Items &nbsp; Passwords &nbsp; Secure Notes &nbsp; My Certificates &nbsp; Keys &nbsp; <b>Certificates</b></div><div style="display:flex;padding:6px 14px;font-size:15.6px;color:#777;border-bottom:1px solid #eee"><span style="width:380px">Name</span><span style="width:160px">Kind</span><span style="width:160px">Expires</span><span>Keychain</span></div>'+
+   r('Your Name (2026mip39)','certificate','22 Nov 2027',1,'⛔')+r('com.apple.systemdefault','certificate','2 Jan 2049',0,'📜')+r('Apple Worldwide Developer Relations','certificate','8 Feb 2030',0,'📜')+'</div></div>'));
+}
+function mTrustWnd(hl){
+  return mWnd('Your Name (2026mip39)',320,70,640,560,
+   '<div style="padding:22px 26px;font-size:18.2px;line-height:1.5"><div style="display:flex;gap:14px;align-items:center"><span style="font-size:54.6px">📜</span><div><b style="font-size:22.1px">Your Name (2026mip39)</b><br><span style="color:#777">Issued by GMU · Expires 22 Nov 2027</span><br><span style="color:#c0392b">⛔ This certificate is not trusted</span></div></div>'+
+   '<div style="margin-top:20px;font-weight:700">▾ Trust</div><div style="display:flex;align-items:center;gap:12px;margin:12px 0 0 14px">When using this certificate:<div class="inp" style="padding:5px 14px;background:#fff"'+(hl?HL:'')+'>Always Trust ▾</div></div>'+
+   '<div style="margin:14px 0 0 14px;color:#555;line-height:1.9">Secure Sockets Layer (SSL) &nbsp; <b>Always Trust</b><br>Secure Mail (S/MIME) &nbsp; <b>Always Trust</b><br>Extensible Authentication (EAP) &nbsp; <b>Always Trust</b></div></div>');
+}
+function mTrust(){return mDesk('Keychain Access',mTrustWnd(true))}
+function mAuth(){
+  return mDesk('Keychain Access',mTrustWnd(false)+
+   '<div class="sheetd" style="left:470px;top:230px;width:340px;text-align:center"><div style="font-size:44.2px">🔐</div><b>You are making changes to your Certificate Trust Settings.</b><div style="margin:10px 0;font-size:16.2px;color:#555">Enter your Mac password to allow this.</div><div class="inp" style="margin-bottom:16px;text-align:left">Password ●●●●●●●</div><div style="display:flex;justify-content:flex-end;gap:10px"><span class="btn">Cancel</span><span class="btn pri"'+HL+'>Update Settings</span></div></div>');
+}
+function mRestart(){
+  return mDesk('Finder','<div style="position:absolute;left:14px;top:30px;width:260px;background:rgba(236,236,236,.97);border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.4);padding:6px;z-index:25;font-size:18.2px;line-height:2.2"><div style="padding:0 12px">About This Mac</div><div style="padding:0 12px">System Settings…</div><div style="padding:0 12px;border-top:1px solid #ccc">Sleep</div><div style="padding:0 12px;background:#0a84ff;color:#fff;border-radius:6px"'+HL+'>Restart…</div><div style="padding:0 12px">Shut Down…</div></div>');
+}
+
+
+/* ---------------- Wi-Fi screens ---------------- */
+function iWifiList(on){
+  return iPage(iNav('‹ Settings','Wi-Fi',''),
+   '<div class="grp"><div class="li">Wi-Fi<span class="val" style="color:#34c759">●</span></div></div><div class="hd">Networks</div><div class="grp">'+
+   '<div class="li"'+(on?'':HL)+'>'+(on?'<span style="color:#007aff">✓</span>':'')+SSID+'<span class="ch" style="font-size:19.5px">🔒 ᯤ</span></div><div class="li">Guest-Network<span class="ch" style="font-size:19.5px">ᯤ</span></div></div>');
+}
+function iWifiLogin(){
+  return iWifiList(true).replace('<div class="home"></div></div>','<div class="dim"></div><div class="alert" style="top:24%"><h4>Enter Password</h4><p>Enter the username and password for “'+SSID+'”</p><div class="field">Username: 2026MIP39</div><div class="field">Password: ●●●●●●●●</div><div class="row2"><div class="ab" style="font-weight:400">Cancel</div><div class="ab"'+HL+'>Join</div></div></div><div class="home"></div></div>').replace('<span style="color:#007aff">✓</span>','');
+}
+function aWifiList(on){
+  return aPage(aTB('Internet',''),
+   '<div class="fl" style="display:flex;justify-content:space-between"><span>Wi-Fi</span><span style="color:#1a73e8">●━</span></div>'+
+   '<div class="fl"'+(on?'':HL)+'>'+(on?'<span style="color:#1a73e8">✔ </span>':'')+SSID+'<small>'+(on?'Connected':'Secured')+'</small></div><div class="fl">Guest-Network<small>Open</small></div>');
+}
+function aWifiDlg(){
+  return aWifiList(true).replace('<div class="nav"></div></div>','<div class="scrim"></div><div class="dlg" style="top:20%"><h4>'+SSID+'</h4><small style="color:#6b6b72">EAP method: PEAP</small><div class="in">Identity: 2026MIP39</div><div class="in">Password: ●●●●●●●●</div><div class="acts"><span>Cancel</span><span'+HL+' style="background:#e8def8">Connect</span></div></div><div class="nav"></div></div>').replace('<span style="color:#1a73e8">✔ </span>','').replace('Connected','Secured');
+}
+function wFly(state){
+  const wifi='<div style="position:absolute;right:20px;bottom:64px;width:400px;background:rgba(243,243,243,.98);border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.4);padding:16px;z-index:25">'+
+   '<div style="font-weight:600;margin-bottom:10px">Wi-Fi &nbsp;<span style="color:#0067c0">●━</span></div>'+
+   '<div style="background:#fff;border-radius:8px;padding:12px 14px;margin-bottom:8px">📶 <b>'+SSID+'</b> <span style="color:#666;font-size:15.6px">'+(state==='ok'?'· Connected, secured':'· Secured')+'</span>'+(state==='list'?'<div style="text-align:right;margin-top:10px"><span class="btn pri"'+HL+'>Connect</span></div>':'')+'</div>'+
+   '<div style="background:#fff;border-radius:8px;padding:12px 14px;opacity:.8">📶 Guest-Network</div></div>';
+  const dlg=state==='cred'?'<div class="wnd" style="left:420px;top:210px;width:440px;height:290px;z-index:30"><div class="wt">Sign in</div><div class="wb" style="padding:22px 26px;font-size:18.2px"><b>'+SSID+'</b><br><br>User name<div class="inp" style="margin:4px 0 12px">2026MIP39</div>Password<div class="inp" style="margin:4px 0 6px">●●●●●●●●</div><div style="position:absolute;right:22px;bottom:16px;display:flex;gap:8px"><span class="btn pri"'+HL+'>OK</span><span class="btn">Cancel</span></div></div></div>':'';
+  return '<div class="gscr win"><div class="desk"></div>'+wifi+dlg+wTask()+'</div>';
+}
+function mWifi(state){
+  const menu='<div style="position:absolute;right:120px;top:30px;width:300px;background:rgba(236,236,236,.97);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.4);padding:10px;z-index:25;font-size:18.2px;line-height:2.2"><div style="padding:0 10px"><b>Wi-Fi</b> <span style="float:right;color:#0a84ff">●━</span></div><div style="padding:0 10px;color:#777;font-size:15.6px">Known / Other Networks</div>'+
+   '<div style="padding:0 10px;'+(state==='list'?'background:#0a84ff;color:#fff;border-radius:6px"'+HL:'"')+'>'+(state==='ok'?'✔ ':'')+SSID+' 🔒</div><div style="padding:0 10px">Guest-Network</div><div style="padding:0 10px;border-top:1px solid #ccc">Wi-Fi Settings…</div></div>';
+  const dlg=state==='cred'?'<div class="sheetd" style="left:470px;top:170px;width:360px"><b style="font-size:19.5px">The Wi-Fi network “'+SSID+'” requires credentials.</b><div style="margin:14px 0 6px">Username</div><div class="inp">2026MIP39</div><div style="margin:12px 0 6px">Password</div><div class="inp">●●●●●●●●</div><div style="display:flex;justify-content:flex-end;gap:10px;margin-top:18px"><span class="btn">Cancel</span><span class="btn pri"'+HL+'>OK</span></div></div>':'';
+  return mDesk('Finder',menu+dlg);
+}
+
+/* ---------------- OS browser wrappers ---------------- */
+const BR={
+  ios:(inner,u)=>iSafari(inner,u),
+  android:(inner,u)=>aChrome(inner,u),
+  win:(inner,u)=>wChrome('lms.gmu.ac.ae/moodle','GMU Moodle',inner,u),
+  mac:(inner,u)=>mSafari('lms.gmu.ac.ae',inner,u)
+};
+function gmailBrowser(os,kind,file,url,tab){
+  const body=gmailBody(kind,file,os);
+  return os==='win'?wChrome(url,tab,body,false):mSafari('mail.google.com',body,false);
+}
+
+/* ============================ FLOWS ============================ */
+const FLOWS={};
+FLOWS.certificate={
+ ios:[
+  {t:'Open Mail',cap:'Open the <b>Mail</b> app on your iPhone — use your <b>University email</b> account.',s:()=>iHome('Mail')},
+  {t:'Request the certificate',cap:'Write to <b>identity@gmu.ac.ae</b> with the subject <b>LMS access</b>, then tap <b>Send</b>.',s:iMailCompose},
+  {t:'Open the reply',cap:'Within a few minutes you receive <b>Controlled System Access</b> with your certificate and its password. Tap it.',s:iMailInbox},
+  {t:'Tap the attachment',cap:'The email holds your certificate file (<b>'+CERT_FILE_APPLE+'</b>) and the <b>password</b>. Tap the attachment.',s:iMailOpen},
+  {t:'Save to Files',cap:'Choose <b>Save to Files</b> from the share menu.',s:iShare},
+  {t:'Choose where to save',cap:'Select <b>On My iPhone</b> and tap <b>Save</b>.',s:iSaveFiles},
+  {t:'Open the file',cap:'Open the <b>Files</b> app and tap the certificate file you saved.',s:()=>iFiles(true)},
+  {t:'Profile downloaded',cap:'iPhone says <b>Profile Downloaded</b>. Tap <b>Close</b>, then open <b>Settings</b>.',s:iFilesAlert},
+  {t:'Settings → General',cap:'In <b>Settings</b>, tap <b>General</b>.',s:()=>iSettings('general')},
+  {t:'VPN & Device Management',cap:'Scroll down and tap <b>VPN &amp; Device Management</b>.',s:iGeneral},
+  {t:'Open the profile',cap:'Under <b>Downloaded Profile</b>, tap <b>identity certificate</b>.',s:iVPN},
+  {t:'Install',cap:'Tap <b>Install</b> at the top right.',s:()=>iInstall(false)},
+  {t:'Passcode',cap:'Enter your <b>iPhone passcode</b>.',s:iPasscode},
+  {t:'Paste the password',cap:'<b>Copy the password</b> from the email and paste it here — <b>no extra spaces</b>. Tap <b>Next</b>.',s:iCertPassword},
+  {t:'Install again',cap:'Tap <b>Install</b> once more to confirm.',s:()=>iInstall(true)},
+  {t:'Done',cap:'<b>Profile Installed</b> — tap <b>Done</b>.',s:iInstalled},
+  {t:'Restart the iPhone',cap:'<b>Restart your iPhone.</b> This step is often skipped — the certificate is not picked up without it.',s:iRestart},
+  {t:'Open Moodle in Safari',cap:'Open <b>Safari</b> and go to <b>lms.gmu.ac.ae/moodle</b>. The login page now appears — sign in with your student number.',s:()=>iSafari(webLogin('ios'),true)}
+ ],
+ android:[
+  {t:'Open Gmail',cap:'Open <b>Gmail</b> and sign in with your <b>University email</b>.',s:()=>aHome('Gmail')},
+  {t:'Request the certificate',cap:'Write to <b>identity@gmu.ac.ae</b> with the subject <b>LMS access</b> and tap <b>Send</b>.',s:aCompose},
+  {t:'Open the reply',cap:'In a few minutes you receive <b>Controlled System Access</b>. Open it.',s:aInbox},
+  {t:'Download the file',cap:'Tap the attachment (<b>'+CERT_FILE_WIN+'</b>) to download it.',s:aMailOpen},
+  {t:'Open the file',cap:'Open <b>Files → Downloads</b> and tap <b>'+CERT_FILE_WIN+'</b>. Choose the <b>certificate installer</b> if asked.',s:()=>aFiles(false)},
+  {t:'Paste the password',cap:'<b>Paste the password</b> from the email (no extra spaces) and tap <b>OK</b>.',s:aExtract},
+  {t:'Install as VPN and apps',cap:'Name it <b>identity certificate</b>, choose <b>VPN and apps</b> and tap <b>OK</b>.',s:aName},
+  {t:'Installed',cap:'Android confirms the certificate is <b>installed</b>.',s:()=>aFiles(true)},
+  {t:'Restart the phone',cap:'<b>Restart the phone</b> so the certificate is picked up.',s:aRestart},
+  {t:'Open Moodle in Chrome',cap:'Open <b>Google Chrome</b> and go to <b>lms.gmu.ac.ae/moodle</b> — the login page appears.',s:()=>aChrome(webLogin('android'),true)}
+ ],
+ win:[
+  {t:'Request the certificate',cap:'From your <b>University email</b>, write to <b>identity@gmu.ac.ae</b> with the subject <b>LMS access</b> and click <b>Send</b>.',s:()=>gmailBrowser('win','compose',CERT_FILE_WIN,'mail.google.com','Inbox - Gmail')},
+  {t:'Download the file',cap:'Open the reply <b>Controlled System Access</b> and download <b>'+CERT_FILE_WIN+'</b>. Keep the <b>password</b> from the email.',s:()=>gmailBrowser('win','open',CERT_FILE_WIN,'mail.google.com','Controlled System Access')},
+  {t:'Open the file',cap:'Open <b>Downloads</b> and double-click <b>'+CERT_FILE_WIN+'</b>.',s:wExplorer},
+  {t:'Import wizard',cap:'The <b>Certificate Import Wizard</b> opens. Keep <b>Current User</b> and click <b>Next</b>.',s:()=>wWizard(1)},
+  {t:'File to import',cap:'The file is already selected. Click <b>Next</b>.',s:()=>wWizard(2)},
+  {t:'Paste the password',cap:'<b>Copy and paste the password</b> from the email (no extra spaces), then click <b>Next</b>.',s:()=>wWizard(3)},
+  {t:'Choose the store',cap:'Select <b>Place all certificates in the following store</b> and choose <b>Personal</b>. Click <b>Next</b>.',s:()=>wWizard(4)},
+  {t:'Finish',cap:'Click <b>Finish</b>.',s:()=>wWizard(5)},
+  {t:'Import successful',cap:'<b>The import was successful.</b> Click <b>OK</b>.',s:wSuccess},
+  {t:'Reopen the browser',cap:'<b>Close the browser completely and open it again</b> (or restart the PC). Go to <b>lms.gmu.ac.ae/moodle</b> — the login page appears.',s:()=>wChrome('lms.gmu.ac.ae/moodle','GMU Moodle',webLogin('win'),true)}
+ ],
+ mac:[
+  {t:'Request the certificate',cap:'From your <b>University email</b>, write to <b>identity@gmu.ac.ae</b> with the subject <b>LMS access</b> and click <b>Send</b>.',s:()=>gmailBrowser('mac','compose',CERT_FILE_APPLE)},
+  {t:'Download the file',cap:'Open the reply <b>Controlled System Access</b> and download <b>'+CERT_FILE_APPLE+'</b>. Keep the <b>password</b>.',s:()=>gmailBrowser('mac','open',CERT_FILE_APPLE)},
+  {t:'Open the file',cap:'In <b>Downloads</b>, double-click <b>'+CERT_FILE_APPLE+'</b>.',s:mFinder},
+  {t:'Paste the password',cap:'<b>Paste the password</b> from the email (no extra spaces) and click <b>OK</b>.',s:mKeyPwd},
+  {t:'Open Keychain Access',cap:'Open <b>Keychain Access</b>, select the <b>login</b> keychain and <b>double-click the certificate in your name</b>.',s:mKeychain},
+  {t:'Trust the certificate',cap:'Open <b>Trust</b> and set <b>When using this certificate</b> to <b>Always Trust</b>.',s:mTrust},
+  {t:'Confirm',cap:'Enter your Mac password and click <b>Update Settings</b>.',s:mAuth},
+  {t:'Restart the Mac',cap:'<b>Restart your Mac</b> (Apple menu → Restart) so the certificate is picked up.',s:mRestart},
+  {t:'Open Moodle in Safari',cap:'Open <b>Safari</b> and go to <b>lms.gmu.ac.ae/moodle</b> — the login page appears.',s:()=>mSafari('lms.gmu.ac.ae',webLogin('mac'),true)}
+ ]
+};
+FLOWS.wifi={
+ ios:[
+  {t:'Open Settings',cap:'Open <b>Settings</b> and tap <b>Wi-Fi</b>.',s:()=>iSettings('wifi')},
+  {t:'Choose the network',cap:'Select <b>'+SSID+'</b>.',s:()=>iWifiList(false)},
+  {t:'Enter your details',cap:'<b>Username</b> = your registration number. <b>Password</b> depends on your batch (see the chat). Use <b>CAPITAL</b> letters, then tap <b>Join</b>.',s:iWifiLogin},
+  {t:'Connected',cap:'A tick shows you are <b>connected</b> to <b>'+SSID+'</b>.',s:()=>iWifiList(true)}
+ ],
+ android:[
+  {t:'Open Settings',cap:'Open <b>Settings → Network &amp; internet → Internet</b>.',s:()=>aHome('Settings')},
+  {t:'Choose the network',cap:'Tap <b>'+SSID+'</b>.',s:()=>aWifiList(false)},
+  {t:'Enter your details',cap:'<b>Identity</b> = your registration number; <b>Password</b> by batch (see the chat), in <b>CAPITALS</b>. Tap <b>Connect</b>.',s:aWifiDlg},
+  {t:'Connected',cap:'It shows <b>Connected</b>.',s:()=>aWifiList(true)}
+ ],
+ win:[
+  {t:'Choose the network',cap:'Click the <b>Wi-Fi icon</b> on the taskbar, select <b>'+SSID+'</b> and click <b>Connect</b>.',s:()=>wFly('list')},
+  {t:'Enter your details',cap:'<b>User name</b> = registration number; <b>Password</b> by batch (see the chat), in <b>CAPITALS</b>. Click <b>OK</b>.',s:()=>wFly('cred')},
+  {t:'Connected',cap:'It shows <b>Connected, secured</b>.',s:()=>wFly('ok')}
+ ],
+ mac:[
+  {t:'Choose the network',cap:'Click the <b>Wi-Fi icon</b> in the menu bar and select <b>'+SSID+'</b>.',s:()=>mWifi('list')},
+  {t:'Enter your details',cap:'<b>Username</b> = registration number; <b>Password</b> by batch (see the chat), in <b>CAPITALS</b>. Click <b>OK</b>.',s:()=>mWifi('cred')},
+  {t:'Connected',cap:'A tick shows you are <b>connected</b>.',s:()=>mWifi('ok')}
+ ]
+};
+['ios','android','win','mac'].forEach(function(os){
+  FLOWS.moodle=FLOWS.moodle||{}; FLOWS.password=FLOWS.password||{};
+  FLOWS.moodle[os]=[
+   {t:'Open the browser',cap:'Open your <b>web browser</b> and go to <b>lms.gmu.ac.ae/moodle</b>. (The identity certificate must already be installed. The Moodle app is not supported.)',s:()=>BR[os](webLogin(os),true)},
+   {t:'Username',cap:'Type your <b>student number</b> as the username — for example <b>2026mip39</b>, <b>not</b> your full email.',s:()=>BR[os](webLogin(os,{hl:'user',user:1}))},
+   {t:'Password',cap:'Enter your <b>password</b> and click <b>Log in</b>.',s:()=>BR[os](webLogin(os,{hl:'btn',user:1,pass:1}))},
+   {t:'Dashboard',cap:'You are in — your <b>courses</b> appear on the Dashboard.',s:()=>BR[os](webDash(os))}
+  ];
+  FLOWS.password[os]=[
+   {t:'Forgotten password',cap:'On the login page, click <b>Forgotten your password?</b>',s:()=>BR[os](webLogin(os,{hl:'forgot',user:0}))},
+   {t:'Registration number',cap:'In the search box enter <b>only your registration number</b> — nothing else.',s:()=>BR[os](webForgot(os,{hl:'field',val:1}))},
+   {t:'Search',cap:'Click <b>Search</b>.',s:()=>BR[os](webForgot(os,{hl:'search',val:1}))},
+   {t:'Check your email',cap:'A <b>reset email</b> arrives — open it and set a new password. <b>No email?</b> Your account may be blocked for a finance or other hold; please contact your college department.',s:()=>BR[os](webSent(os))}
+  ];
+});
+const GTITLE={certificate:'Install the identity certificate',wifi:'Connect to GMU Wi-Fi',moodle:'Sign in to Moodle',password:'Reset your password'};
+const GVIDEO={certificate:true};
+
+/* ============================ ENGINE ============================ */
+const DEVS={ios:{w:390,h:844,p:1},android:{w:393,h:852,p:1},win:{w:1280,h:760,p:0},mac:{w:1280,h:760,p:0}};
+const STEP_MS=5200;
+const G={anim:null,cat:'',os:'ios',steps:[],i:0,playing:true,scale:1,timer:null,t2:null};
+
+function detectOS(){
+  const ua=navigator.userAgent||'';
+  if(/iPhone|iPad|iPod/i.test(ua)||(/Macintosh/i.test(ua)&&navigator.maxTouchPoints>1)) return 'ios';
+  if(/Android/i.test(ua)) return 'android';
+  if(/Windows/i.test(ua)) return 'win';
+  if(/Macintosh|Mac OS/i.test(ua)) return 'mac';
+  return 'win';
+}
+function isNarrow(){return window.innerWidth<=900}
+function guideAvailable(anim){return !!(anim && (FLOWS[anim]||CUSTOM_SETS[anim]))}
+
 function setOS(os){
-  currentOS=os;
+  currentOS=os; G.os=os;
+  document.querySelector('.main').classList.toggle('lap',os==='win'||os==='mac');
   track('os_switch',{detail:os});
-  document.querySelectorAll('.dtab').forEach(t=>t.classList.toggle('on',t.dataset.os===os));
-  if(lastAnim) playAnimation(lastAnim.anim,lastAnim.cat);
+  document.querySelectorAll('.dtab').forEach(function(t){t.classList.toggle('on',t.dataset.os===os)});
+  if(G.anim) renderGuide();
 }
-let lastAnim=null;
-
-/* status bar markup per OS */
-function statusBar(os){
-  const time = os==='ios'||os==='android' ? '9:41' : '';
-  if(os==='ios')     return `<div class="sbar"><span>9:41</span><span class="r">📶 🔋</span></div>`;
-  if(os==='android') return `<div class="sbar"><span>9:41</span><span class="r">📶 🔋 100%</span></div>`;
-  return '';
+function playAnimation(anim,cat){
+  if(guideAvailable(anim)){
+    if(isNarrow()){G.pending={anim:anim,cat:cat};return;}
+    openGuide(anim,cat);
+  } else closeGuide();
 }
-
-/* Build an app window with a list of steps that animate in sequence */
-function buildGuide(os, title, barColor, steps){
-  const isPhone = (os==='ios'||os==='android');
-  const wp = os==='ios'?'wp-ios':os==='android'?'wp-android':os==='win'?'wp-win':'wp-mac';
-
-  const rows = steps.map((s,i)=>`
-    <div class="row" data-i="${i}">
-      <div class="ic">${s.icon}</div>
-      <div><b>${s.label}</b>${s.sub?`<div style="color:var(--muted);font-size:10px">${s.sub}</div>`:''}</div>
-      <div class="chk">✓</div>
-    </div>`).join('');
-
-  const inner = `
-    <div class="scr ${wp}">
-      ${statusBar(os)}
-      <div class="win" id="win">
-        <div class="bar">
-          <div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
-          ${title}
-        </div>
-        <div class="body" id="winbody">${rows}
-          <div class="tap" id="tap"></div>
-        </div>
-      </div>
-    </div>`;
-
-  let frame;
-  if(isPhone){
-    frame = `<div class="phone ${os}"><div class="notch"></div>${inner}</div>`;
-  }else{
-    frame = `<div class="laptop"><div class="screen">${inner}</div><div class="base"></div></div>`;
+function openGuide(anim,cat){
+  G.anim=anim; G.cat=cat||''; G.os=currentOS;
+  document.querySelector('.main').classList.add('hasguide');
+  document.querySelector('.main').classList.toggle('lap',currentOS==='win'||currentOS==='mac');
+  document.querySelectorAll('.dtab').forEach(function(t){t.classList.toggle('on',t.dataset.os===currentOS)});
+  requestAnimationFrame(renderGuide);
+  track('guide_open',{detail:anim,category:cat||''});
+}
+function closeGuide(){
+  clearTimeout(G.timer);clearTimeout(G.t2);
+  document.querySelector('.main').classList.remove('hasguide');
+  G.anim=null;
+}
+function renderGuide(){
+  clearTimeout(G.timer);clearTimeout(G.t2);
+  const anim=G.anim; if(!anim) return;
+  const flow=FLOWS[anim];
+  const stage=document.getElementById('gstage'), steps=document.getElementById('gsteps'), foot=document.getElementById('gfoot'), tabs=document.getElementById('dtabs');
+  document.getElementById('gTitle').textContent=flow?(GTITLE[anim]||'Visual guide'):((CUSTOM_SETS[anim]||{}).title||'Guide');
+  if(!flow){                                     // sheet-defined list of steps (no device)
+    stage.style.display='none';tabs.style.display='none';foot.style.display='none';steps.style.display='block';
+    steps.innerHTML=CUSTOM_SETS[anim].steps.map(function(s,i){
+      return '<div class="srow"><b>'+(i+1)+'</b><div><span>'+s.icon+' '+s.label+'</span><small>'+s.cap+'</small></div></div>';}).join('');
+    return;
   }
-
-  stage.innerHTML = frame + `<div class="dcap" id="dcap">Starting…</div>`;
+  stage.style.display='grid';tabs.style.display='flex';foot.style.display='block';steps.style.display='none';
+  G.steps=flow[G.os]||flow.ios; G.i=0; G.playing=true;
+  document.getElementById('gPlay').textContent='⏸';
+  document.getElementById('gVid').style.display=(GVIDEO[anim]&&G.os!=='android')?'inline-block':'none';
+  buildFrame(G.os);
+  showStep(0);
 }
-
-/* sequence the step animation + tap ripples + captions */
-function runSteps(steps){
-  const rows=[...document.querySelectorAll('.row')];
-  const win=document.getElementById('win');
-  const dcap=document.getElementById('dcap');
-  const tap=document.getElementById('tap');
-  win.classList.add('show');
-
-  let i=0;
-  function next(){
-    if(i>=steps.length){
-      dcap.innerHTML='✅ <b>Done!</b> Follow these steps on your device.';
-      return;
-    }
-    const r=rows[i], s=steps[i];
-    r.classList.add('in');
-    setTimeout(()=>{
-      // tap ripple over the row
-      const rect=r.getBoundingClientRect(), body=document.getElementById('winbody').getBoundingClientRect();
-      tap.style.left=(rect.left-body.left+20)+'px';
-      tap.style.top=(rect.top-body.top+4)+'px';
-      tap.classList.remove('go');void tap.offsetWidth;tap.classList.add('go');
-      r.classList.add('sel');
-      dcap.innerHTML=s.cap||('<b>'+s.label+'</b>');
-      setTimeout(()=>{r.classList.add('done');i++;next();},780);
-    },420);
+function buildFrame(os){
+  const d=DEVS[os], stage=document.getElementById('gstage');
+  const pad=d.p?14:16;
+  const fw=d.p?d.w+pad*2:d.w+pad*2+40, fh=d.p?d.h+pad*2:d.h+pad*2-2+22;
+  const vp='<div class="gvp" id="gvp" style="width:'+d.w+'px;height:'+d.h+'px"><div class="ghl" id="ghl"></div><div class="gptr'+(d.p?'':' cur')+'" id="gptr"></div></div>';
+  stage.innerHTML='<div class="gfit" id="gfit"><div class="gdev" id="gdev" style="width:'+fw+'px;height:'+fh+'px">'+
+   (d.p?'<div class="gphone">'+vp+'</div>':'<div class="glap" style="margin:0 20px">'+vp+'</div><div class="glapbase" style="margin:0"></div>')+'</div></div>';
+  fitDevice();
+}
+function fitDevice(){
+  const st=document.getElementById('gstage'), dev=document.getElementById('gdev'), f=document.getElementById('gfit');
+  if(!st||!dev||!f) return;
+  const aw=st.clientWidth-20, ah=st.clientHeight-20;
+  const w=parseFloat(dev.style.width), h=parseFloat(dev.style.height);
+  if(aw<=0||ah<=0) return;
+  const s=Math.min(aw/w,ah/h,1.2);
+  G.scale=s;
+  dev.style.transform='scale('+s+')';
+  f.style.width=(w*s)+'px'; f.style.height=(h*s)+'px';
+}
+function showStep(i){
+  clearTimeout(G.timer);clearTimeout(G.t2);
+  const st=G.steps[i]; if(!st) return;
+  G.i=i;
+  const vp=document.getElementById('gvp'); if(!vp) return;
+  vp.querySelectorAll('.gscr').forEach(function(e){e.remove()});
+  vp.insertAdjacentHTML('afterbegin',st.s());
+  document.getElementById('gStepLbl').textContent='Step '+(i+1)+' of '+G.steps.length+' · '+st.t;
+  document.getElementById('gCap').innerHTML=st.cap;
+  document.getElementById('gBar').style.width=((i+1)/G.steps.length*100)+'%';
+  const hl=document.getElementById('ghl'), ptr=document.getElementById('gptr');
+  hl.classList.remove('on'); ptr.classList.remove('tap');
+  G.t2=setTimeout(function(){placeHL(vp,hl,ptr)},350);
+  if(G.playing){
+    G.timer=setTimeout(function(){
+      if(i<G.steps.length-1) showStep(i+1);
+      else {G.playing=false;document.getElementById('gPlay').textContent='↻';}
+    },STEP_MS);
   }
-  next();
 }
-
-/* ---- animation definitions per KB topic ---- */
-const BUILTIN_ANIMS=['wifi','moodle','certificate','password','email','exam','turnitin','assignment','folio','onboard'];
-const CUSTOM_SETS={};          // animations defined from the sheet's Steps column
-function playAnimation(anim, cat){
-  if(!anim || (BUILTIN_ANIMS.indexOf(anim)<0 && !CUSTOM_SETS[anim])) return;   // topic has no guide
-  idle.style.display='none';
-  lastAnim={anim,cat};
-  const os=currentOS;
-  const P=(os==='ios'||os==='android');
-
-  const SETS={
-    wifi:{title:P?'⚙️ Settings':'🖧 Network Settings',steps:[
-      {icon:'📶',label:'Open Wi-Fi',sub:P?'Settings → Wi-Fi':'Taskbar → Network',cap:'Open <b>Wi-Fi</b> settings'},
-      {icon:'🏫',label:'GMU-Students',sub:'Select the network',cap:'Choose <b>GMU-Students</b>'},
-      {icon:'🆔',label:'Username',sub:'Registration number',cap:'Username = your <b>registration number</b>'},
-      {icon:'🔑',label:'Password',sub:'By batch (see chat)',cap:'Enter the <b>batch password</b> (CAPITALS)'},
-      {icon:'✅',label:'Connected',sub:'You are online',cap:'You are <b>connected</b>'}
-    ]},
-    moodle:{title:'🎓 Moodle / MyGMU',steps:[
-      {icon:'🔏',label:'Certificate installed',sub:'Required on the device',cap:'Ensure the <b>identity certificate</b> is installed'},
-      {icon:'🌐',label:'Open in browser',sub:'lms.gmu.ac.ae/moodle',cap:'Open <b>lms.gmu.ac.ae/moodle</b> in a browser'},
-      {icon:'🆔',label:'Username',sub:'Student number only',cap:'Use your <b>student number</b>, not your email'},
-      {icon:'🔑',label:'Enter password',sub:'Set on first sign-in',cap:'Enter your <b>password</b>'},
-      {icon:'📚',label:'Dashboard',sub:'Your courses appear',cap:'You reach your <b>Dashboard</b>'}
-    ]},
-    certificate:{title:'🔏 Identity Certificate',steps:[
-      {icon:'✉️',label:'Request certificate',sub:'identity@gmu.ac.ae',cap:'Email <b>identity@gmu.ac.ae</b> (subject: LMS access)'},
-      {icon:'📥',label:'Receive files',sub:'Certificate + password',cap:'Receive your <b>certificate</b> and password'},
-      {icon:'⬇️',label:'Install (video guide)',sub:'client.p12 Win · legacy Mac',cap:'Install: <b>client.p12</b> (Win) / <b>clientlegacy.p12</b> (Mac)'},
-      {icon:'🔁',label:'Restart device',sub:'Most-skipped step!',cap:'<b>Restart</b> — without it the cert is not picked up'},
-      {icon:'🌐',label:'Open in browser',sub:'Not the mobile app',cap:'Open Moodle in a <b>web browser</b>'}
-    ]},
-    password:{title:'🔐 Password Reset',steps:[
-      {icon:'🌐',label:'Login page',sub:'Open the portal',cap:'Open the <b>login page</b>'},
-      {icon:'❓',label:'Forgot Password',sub:'Click the link',cap:'Click <b>Forgot Password</b>'},
-      {icon:'🆔',label:'Registration number',sub:'Search this only',cap:'Enter only your <b>registration number</b>'},
-      {icon:'🔗',label:'Open reset email',sub:'Check your inbox',cap:'Open the <b>reset email</b>'},
-      {icon:'✅',label:'Set new password',sub:'Confirm twice',cap:'Set your <b>new password</b>'}
-    ]},
-    email:{title:'✉️ University Email',steps:[
-      {icon:'🌐',label:'Open Gmail',sub:'mail.google.com',cap:'Open <b>mail.google.com</b>'},
-      {icon:'✉️',label:'University email',sub:'id@mygmu.ac.ae',cap:'Enter your <b>University email</b>'},
-      {icon:'🔑',label:'Temporary password',sub:'From welcome email',cap:'Enter the <b>temporary password</b>'},
-      {icon:'🔐',label:'Set new password',sub:'Then enable 2-Step',cap:'Set a <b>new password</b>, enable 2-Step'},
-      {icon:'📥',label:'Inbox ready',sub:'Mail loads',cap:'Your <b>inbox</b> is ready'}
-    ]},
-    exam:{title:'📝 Examplify',steps:[
-      {icon:'⬇️',label:'Download Examplify',sub:'Supported laptop only',cap:'Download <b>Examplify</b>'},
-      {icon:'🆔',label:'Register',sub:'Institution ID + login',cap:'Register with <b>college credentials</b>'},
-      {icon:'📂',label:'Download exam',sub:'Before start time',cap:'Download the <b>exam file</b>'},
-      {icon:'🧪',label:'Mock exam',sub:'Check compatibility',cap:'Run the <b>mock exam</b> first'},
-      {icon:'✅',label:'Ready',sub:'Device compatible',cap:'Your device is <b>ready</b>'}
-    ]},
-    turnitin:{title:'📑 Turnitin Access',steps:[
-      {icon:'📑',label:'Turnitin request',sub:'Access / originality',cap:'For <b>Turnitin access</b> & originality reports'},
-      {icon:'👤',label:'Contact Mr. Suraj',sub:'suraj@gmu.ac.ae',cap:'Email <b>Mr. Suraj</b> — suraj@gmu.ac.ae'},
-      {icon:'📝',label:'Include details',sub:'Name, ID, course',cap:'Add your <b>name, student number, course</b>'},
-      {icon:'🎫',label:'Or raise a ticket',sub:'Routed to him',cap:'Or <b>raise a ticket</b> — it reaches him'},
-      {icon:'✅',label:'Access granted',sub:'He assists you',cap:'He will <b>set up your access</b>'}
-    ]},
-    assignment:{title:'📚 Lectures & Assignments',steps:[
-      {icon:'📚',label:'Lecture / assignment',sub:'LMS content issue',cap:'For <b>lectures &amp; assignments</b> on the LMS'},
-      {icon:'👤',label:'Contact Mr. Suraj',sub:'suraj@gmu.ac.ae',cap:'Email <b>Mr. Suraj</b> — suraj@gmu.ac.ae'},
-      {icon:'📝',label:'Describe the issue',sub:'Course + error',cap:'Give the <b>course, assignment &amp; error</b>'},
-      {icon:'🎫',label:'Or raise a ticket',sub:'Routed to him',cap:'Or <b>raise a ticket</b> — it reaches him'},
-      {icon:'✅',label:'Resolved',sub:'He assists you',cap:'He will <b>help resolve it</b>'}
-    ]},
-    folio:{title:'🗂️ Folio — Registration',steps:[
-      {icon:'🌐',label:'Log in to Folio',sub:'GMU credentials',cap:'Log in to <b>Folio</b>'},
-      {icon:'📝',label:'Semester Registration',sub:'Open the menu',cap:'Open <b>Semester Registration</b>'},
-      {icon:'📚',label:'Select courses',sub:'Choose your modules',cap:'Select your <b>courses</b>'},
-      {icon:'📤',label:'Submit',sub:'Send application',cap:'Submit for <b>approval</b>'},
-      {icon:'🏫',label:'Dept approval',sub:'College confirms',cap:'Department <b>approves</b> it'}
-    ]},
-    onboard:{title:'🚀 New Student Setup',steps:[
-      {icon:'✉️',label:'Activate email',sub:'Set your password',cap:'Activate your <b>University email</b>'},
-      {icon:'🔐',label:'Enable 2-Step',sub:'Mandatory security',cap:'Enable <b>2-Step Verification</b>'},
-      {icon:'🔏',label:'Get certificate',sub:'identity@gmu.ac.ae',cap:'Request &amp; install the <b>certificate</b>'},
-      {icon:'🎓',label:'Log in to Moodle',sub:'Student number',cap:'Sign in to <b>Moodle</b>'},
-      {icon:'✅',label:'All set',sub:'You are ready',cap:'You are <b>all set</b>!'}
-    ]}
-  };
-
-  const def = CUSTOM_SETS[anim] || SETS[anim] || SETS.moodle;
-  buildGuide(os, def.title, '', def.steps);
-  setTimeout(()=>runSteps(def.steps),200);
+function placeHL(vp,hl,ptr){
+  const el=vp.querySelector('[data-hl]');
+  if(!el){hl.classList.remove('on');ptr.style.opacity='0';return;}
+  ptr.style.opacity='1';
+  const r=el.getBoundingClientRect(), v=vp.getBoundingClientRect(), s=G.scale||1;
+  if(!r.width||!r.height) return;
+  const x=(r.left-v.left)/s, y=(r.top-v.top)/s, w=r.width/s, h=r.height/s;
+  hl.style.left=(x-5)+'px';hl.style.top=(y-5)+'px';hl.style.width=(w+10)+'px';hl.style.height=(h+10)+'px';
+  hl.classList.add('on');
+  ptr.style.left=(x+Math.min(w*0.8,w-18))+'px';ptr.style.top=(y+Math.min(h*0.72,h-8))+'px';
+  G.t2=setTimeout(function(){ptr.classList.add('tap')},1000);
+}
+function gNext(){G.playing=false;document.getElementById('gPlay').textContent='▶';if(G.i<G.steps.length-1)showStep(G.i+1)}
+function gPrev(){G.playing=false;document.getElementById('gPlay').textContent='▶';if(G.i>0)showStep(G.i-1)}
+function gToggle(){
+  if(G.i>=G.steps.length-1&&!G.playing&&document.getElementById('gPlay').textContent==='↻'){gReplay();return;}
+  G.playing=!G.playing;
+  document.getElementById('gPlay').textContent=G.playing?'⏸':'▶';
+  if(G.playing) showStep(G.i);
+  else {clearTimeout(G.timer);}
+}
+function gReplay(){G.playing=true;document.getElementById('gPlay').textContent='⏸';showStep(0)}
+function gVideo(){openVideo(G.os==='ios'?'ios':G.os==='mac'?'mac':'win')}
+window.addEventListener('resize',function(){fitDevice();if(G.anim){const vp=document.getElementById('gvp');if(vp)placeHL(vp,document.getElementById('ghl'),document.getElementById('gptr'))}});
+if(window.ResizeObserver){new ResizeObserver(function(){fitDevice()}).observe(document.getElementById('gstage'));}
+function addGuideButton(anim){
+  const bubbles=document.querySelectorAll('#chat .msg.bot .bubble'); const b=bubbles[bubbles.length-1]; if(!b) return;
+  b.insertAdjacentHTML('beforeend',"<div style='margin-top:8px'><button class='vbtn' style='color:#0a6b4b;background:#e6f6ef;border-color:#b6e2d0' onclick=\"G.pending=null;openGuide('"+anim+"','"+(G.cat||'')+"')\">▶ Watch the step-by-step guide</button></div>");
 }
 
 /* ============================================================
@@ -1159,8 +1815,10 @@ function startKnowledgeSync(){
    INIT
    ============================================================ */
 function init(){
+  currentOS=detectOS(); G.os=currentOS;
   renderChips();
   startKnowledgeSync();
+  initAdmin();
   initSpeech();
   const saved=lsGet('gmuRole');
   if(saved){
