@@ -426,6 +426,12 @@ header.top::before{content:"";position:absolute;inset:0;pointer-events:none;opac
 header.top::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:35%;background:linear-gradient(90deg,transparent,var(--glow),var(--gold),transparent);animation:scan 5s linear infinite}
 @keyframes scan{from{transform:translateX(-100%)}to{transform:translateX(300%)}}
 header.top>*{position:relative;z-index:1}
+.logo-plate{height:48px;min-width:48px;padding:5px 12px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 0 2px rgba(201,162,39,.65),0 6px 18px rgba(0,0,0,.35)}
+.logo-plate img{height:100%;max-width:190px;width:auto;object-fit:contain;display:none}
+.logo-plate.has img{display:block}.logo-plate.has #logoText{display:none}
+.logo-plate #logoText{font-weight:800;color:var(--navy);font-size:18px;letter-spacing:-1px}
+.reg-logo{background:#fff;border-radius:10px;height:44px;padding:4px 10px;display:none;margin-bottom:12px;position:relative}
+.reg-logo.has{display:inline-block}.reg-logo img{height:100%;width:auto}
 .logo-badge{box-shadow:0 0 0 2px rgba(201,162,39,.65),0 6px 18px rgba(0,0,0,.35)}
 .top h1{letter-spacing:.2px}
 .agent-status{display:flex;align-items:center;gap:7px;font-size:12px;color:#bfe9f0;margin-top:2px}
@@ -507,7 +513,7 @@ header.top>*{position:relative;z-index:1}
 
   <!-- ===================== HEADER ===================== -->
   <header class="top">
-    <div class="logo-badge" aria-hidden="true">GMU</div>
+    <div class="logo-plate"><img id="uniLogo" alt="Gulf Medical University" onerror="logoFallback()"><span id="logoText" aria-hidden="true">GMU</span></div>
     <div>
       <h1>GMU AI Support Agent</h1>
       <div class="agent-status"><span class="dot" aria-hidden="true"></span><b>Online</b><span class="tag">AI-assisted</span><span>IT &amp; Student Support · Gulf Medical University</span></div>
@@ -611,6 +617,7 @@ header.top>*{position:relative;z-index:1}
 <div class="modal-overlay" id="roleModal" role="dialog" aria-modal="true" aria-labelledby="regTitle">
   <form class="reg-box" id="regForm" novalidate onsubmit="return submitProfile(event)">
     <div class="reg-head">
+      <div class="reg-logo" id="regLogo"><img id="regLogoImg" alt="Gulf Medical University"></div>
       <h2 id="regTitle">Welcome to the GMU AI Support Agent</h2>
       <p>Please introduce yourself so I can personalise your support and pre-fill your requests. All fields are required to continue.</p>
     </div>
@@ -654,7 +661,7 @@ const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbxImt9pOkPMY7ryEZbP
 
 /* ----- LINKS ----- */
 const LINKS = {
-  ticket  : 'https://mygmu.github.io/gmu-support/',
+  ticket  : 'https://mygmu.github.io/gmu-support/',   // fixed: the GMU ticketing system (not overridden by the sheet)
   portal  : 'https://support.mygmu.ac.ae',
   videos  : 'https://www.youtube.com/@gmu-E-Learning-Center',
   moodle  : 'https://lms.gmu.ac.ae/moodle',
@@ -687,17 +694,17 @@ const KB_BUILTIN = [
   {
     id:'moodle_online', cat:'Moodle', anim:'moodle',
     kw:['remedial','bcps','bcps program','online moodle','lms-online','remedial program','remedial moodle','bcps moodle','board certified pharmacotherapy'],
-    a:"Students on the **Remedial** and **BCPS** programmes use a separate Moodle site:\n1. Make sure your **digital identity certificate is installed** on the device — this site also requires it. If you don't have one, request it from <a href='mailto:identity@gmu.ac.ae?subject=LMS access'>identity@gmu.ac.ae</a> (subject: **LMS access**) from your University email.\n2. **Restart the device** after installing the certificate.\n3. Open <a href='https://lms-online.gmu.ac.ae/moodle/login/index.php' target='_blank'>lms-online.gmu.ac.ae/moodle</a> in a **web browser**.\n4. Sign in with your **student number** as the username and your password.\n\nIf no login page appears, the certificate is usually the cause — ask me about the **identity certificate**."
+    a:"Students on the **Remedial** and **BCPS** programmes use a separate Moodle site:\n1. Make sure your **digital identity certificate is installed** on the device — this site also requires it. If you don't have one, request it from <a href='mailto:identity@gmu.ac.ae?subject=LMS access'>identity@gmu.ac.ae</a> (subject: **LMS access**) from your University email.\n2. Open <a href='https://lms-online.gmu.ac.ae/moodle/login/index.php' target='_blank'>lms-online.gmu.ac.ae/moodle</a> in a **web browser**.\n3. Sign in with your **student number** as the username and your password.\n\nIf no login page appears, the certificate is usually the cause — ask me about the **identity certificate**."
   },
   {
     id:'certificate', cat:'Certificate', anim:'certificate',
     kw:['certificate','identity certificate','digital certificate','ssl certificate','no login page','login page not showing','cant access moodle','moodle not opening','moodle not loading','keychain','install certificate','controlled system access','profile not signed','not verified','certificate password','p12','renew certificate','certificate expired','renew'],
-    a:"Moodle (MyGMU) can only open on a device that carries your personal **digital identity certificate**. Without it, no login page appears — and on iPhone you may see <b>profile not signed in / not verified</b>.\n\n**Step 1 — Request it.** From your University email, email <a href='mailto:identity@gmu.ac.ae?subject=LMS access'>identity@gmu.ac.ae</a> with the subject **LMS access**. You'll receive a reply headed *Controlled System Access* with your certificate file and its password. It is issued to you alone — never share or forward it.\n\n**Step 2 — Install it** using the video guide for your device:\n<button class='vbtn' onclick=\"openVideo('ios')\">📱 iPhone &amp; iPad guide</button> <button class='vbtn' onclick=\"openVideo('mac')\">💻 Mac guide</button> <button class='vbtn' onclick=\"openVideo('win')\">🪟 Windows guide</button>\n\n**What to do on each device:**\n• **iPhone/iPad:** Mail → save the attachment to **Files** → tap the file → **Settings → General → VPN & Device Management** → *identity certificate* → **Install** → passcode → paste the password → **Next → Install → Done** → restart → open Safari.\n• **Mac:** download the file and open it → paste the password → open **Keychain Access**, select **login**, double-click the certificate in your name → **Trust → Always Trust** → restart → open Safari.\n• **Android:** download the attachment and tap it → paste the password → install it for **VPN and apps** → restart → open Chrome.\n• **Windows:** open the file → **Certificate Import Wizard** → **Next** → paste the password → store in **Personal** → **Finish** → close and reopen the browser.\n\nUse the **clientlegacy.p12** file on **iPhone/iPad and Mac**, and the **client.p12** file on **Windows and Android**. When entering the certificate password, **copy it with no extra spaces** — a trailing space is the usual cause of an \"incorrect password\" error.\n\n**Step 3 — Restart the device** after installing (this is the most-skipped step — without it the certificate is not picked up), then open <a href='https://lms.gmu.ac.ae/moodle' target='_blank'>lms.gmu.ac.ae/moodle</a> in a **web browser** (Remedial and BCPS students: <a href='https://lms-online.gmu.ac.ae/moodle/login/index.php' target='_blank'>lms-online.gmu.ac.ae/moodle</a> — the same certificate is required). The Moodle mobile app is not supported.\n\n**Install it on every device** you use — laptop, tablet and phone each need their own copy.\n\n**Still not opening?** Confirm you restarted, installed it on this device, and are in a browser (not the app). On Windows, install it for your own user account, then close and reopen the browser; you can also try removing VPN and temporarily disabling antivirus. On Mac, open Keychain Access and make sure the certificate in your name is Trusted and any expired certificates are removed. On iPhone/iPad, remove any VPN and update to the latest iOS. If it still fails, please raise a ticket or visit the E-Learning Centre — a representative will assist you."
+    a:"Moodle (MyGMU) can only open on a device that carries your personal **digital identity certificate**. Without it, no login page appears — and on iPhone you may see <b>profile not signed in / not verified</b>.\n\n**Step 1 — Request it.** From your University email, email <a href='mailto:identity@gmu.ac.ae?subject=LMS access'>identity@gmu.ac.ae</a> with the subject **LMS access**. You'll receive a reply headed *Controlled System Access* with your certificate file and its password. It is issued to you alone — never share or forward it.\n\n**Step 2 — Install it** using the video guide for your device:\n<button class='vbtn' onclick=\"openVideo('ios')\">📱 iPhone &amp; iPad guide</button> <button class='vbtn' onclick=\"openVideo('mac')\">💻 Mac guide</button> <button class='vbtn' onclick=\"openVideo('win')\">🪟 Windows guide</button>\n\n**What to do on each device:**\n• **iPhone/iPad:** Mail → save the attachment to **Files** → tap the file → **Settings → General → VPN & Device Management** → *identity certificate* → **Install** → passcode → paste the password → **Next → Install → Done** → open Safari.\n• **Mac:** download the file and open it → paste the password → open **Keychain Access**, select **login**, double-click the certificate in your name → **Trust → Always Trust** → open Safari.\n• **Android:** download the attachment and tap it → paste the password → install it for **VPN and apps** → open Chrome.\n• **Windows:** open the file → **Certificate Import Wizard** → **Next** → paste the password → store in **Personal** → **Finish** → close and reopen the browser.\n\nUse the **clientlegacy.p12** file on **iPhone/iPad and Mac**, and the **client.p12** file on **Windows and Android**. When entering the certificate password, **copy it with no extra spaces** — a trailing space is the usual cause of an \"incorrect password\" error.\n\n**Step 3 — Open Moodle.** Close and reopen your browser, then open <a href='https://lms.gmu.ac.ae/moodle' target='_blank'>lms.gmu.ac.ae/moodle</a> in a **web browser** (Remedial and BCPS students: <a href='https://lms-online.gmu.ac.ae/moodle/login/index.php' target='_blank'>lms-online.gmu.ac.ae/moodle</a> — the same certificate is required). The Moodle mobile app is not supported.\n\n**Install it on every device** you use — laptop, tablet and phone each need their own copy.\n\n**Still not opening?** Confirm it is installed on this device and that you are in a browser (not the app); if it still fails, restart the device once. On Windows, install it for your own user account, then close and reopen the browser; you can also try removing VPN and temporarily disabling antivirus. On Mac, open Keychain Access and make sure the certificate in your name is Trusted and any expired certificates are removed. On iPhone/iPad, remove any VPN and update to the latest iOS. If it still fails, please raise a ticket or visit the E-Learning Centre — a representative will assist you."
   },
   {
     id:'cert_renew', cat:'Certificate', anim:'certificate',
     kw:['renew certificate','certificate expired','expired certificate','access certificate expired','renewal','certificate renewal'],
-    a:"If your access certificate has **expired**, Moodle will stop opening — but your username and password have not changed and are not the problem. An expired certificate **cannot be renewed in place**; a new one must be issued.\n\n1. From your University email, email **identity@gmu.ac.ae** (subject: **LMS access**) stating that your certificate has expired, with your name, student number, programme and University email.\n2. Install the new certificate from the reply using the video guide for your device.\n3. **Restart the device**, then sign in at lms.gmu.ac.ae/moodle in a web browser.\n\nRemember to install it on **each device** you use. If it still won't open after restarting, please raise a ticket or contact support@mygmu.ac.ae."
+    a:"If your access certificate has **expired**, Moodle will stop opening — but your username and password have not changed and are not the problem. An expired certificate **cannot be renewed in place**; a new one must be issued.\n\n1. From your University email, email **identity@gmu.ac.ae** (subject: **LMS access**) stating that your certificate has expired, with your name, student number, programme and University email.\n2. Install the new certificate from the reply using the video guide for your device.\n3. Close and reopen your browser, then sign in at lms.gmu.ac.ae/moodle.\n\nRemember to install it on **each device** you use. If it still won't open, please raise a ticket or contact support@mygmu.ac.ae."
   },
   {
     id:'password', cat:'Account', anim:'password',
@@ -722,7 +729,7 @@ const KB_BUILTIN = [
   {
     id:'lectures_assignments', cat:'Lectures & Assignments', anim:'assignment',
     kw:['lecture','lectures','recording','lecture recording','course material','assignment','assignments','submission','submit assignment','assignment not uploading','cannot submit','grade on assignment','upload assignment'],
-    a:"For **LMS lectures, course materials, and assignment-related matters** (including lecture recordings and assignment submission or upload problems), please contact **Mr. Suraj** at <a href='mailto:suraj@gmu.ac.ae'>suraj@gmu.ac.ae</a>.\n\nWhen you write, include your **name, student number, course, and the exact issue** (for example, the assignment name and any error message). You can also raise a ticket and it will be routed to him.\n\nTip: if an assignment will not upload, first check the file type and size limits shown on the submission page and try a stable internet connection before reporting it."
+    a:"For **lecture content, recordings, course materials and assignment matters** (instructions, deadlines, extensions, re-opening a submission and grades), please **coordinate directly with your course faculty**. They manage their own course on Moodle.\n\nIf the problem is technical (for example Moodle will not open, or a file will not upload), tell me what you see and I will help. If it stays unresolved, raise a ticket."
   },
   {
     id:'web_gradebook', cat:'Moodle (Teaching) — Gradebook', anim:'',
@@ -742,7 +749,7 @@ const KB_BUILTIN = [
   {
     id:'web_assignment_submit', cat:'Moodle (Teaching) — Assignment submission problems', anim:'',
     kw:['cannot submit','can\'t submit','no submit button','submit button missing','file rejected','assignment late','cannot edit submission','submission statement','assignment upload','upload failed','submit assignment','group submission'],
-    a:"**Student cannot submit an assignment? Check these:**\n• **Cannot submit yet:** the *Allow submissions from* date has not arrived.\n• **No submit button:** the *Cut-off date* has passed.\n• **Marked late:** the work was submitted after the due date or time limit.\n• **File rejected:** the file type is not accepted or it is larger than the size limit.\n• **Cannot edit:** the work is already submitted or the attempts are used up. The teacher can revert the submission to draft.\n• **Group assignment blocked:** the student is not in a group, or required group members have not submitted.\n• **Cannot submit:** a required *submission statement* has not been accepted.\n\nStudents with a due-date problem should contact their teacher. For an Assignment set-up or upload problem that persists, contact Mr. Suraj at {{suraj}} with your name, student number, course and the exact issue.\n\n*Source: docs.moodle.org (Assignment settings).*"
+    a:"**Student cannot submit an assignment? Check these:**\n• **Cannot submit yet:** the *Allow submissions from* date has not arrived.\n• **No submit button:** the *Cut-off date* has passed.\n• **Marked late:** the work was submitted after the due date or time limit.\n• **File rejected:** the file type is not accepted or it is larger than the size limit.\n• **Cannot edit:** the work is already submitted or the attempts are used up. The teacher can revert the submission to draft.\n• **Group assignment blocked:** the student is not in a group, or required group members have not submitted.\n• **Cannot submit:** a required *submission statement* has not been accepted.\n\nStudents should contact their **course faculty** about dates, extensions or re-opening a submission. If the file will not upload at all, raise a ticket.\n\n*Source: docs.moodle.org (Assignment settings).*"
   },
   {
     id:'web_quiz', cat:'Moodle (Teaching) — Quiz', anim:'',
@@ -783,21 +790,22 @@ const RULES_BUILTIN = `CRITICAL FACTS (apply these precisely):
    • File by OS: use clientlegacy.p12 on IPHONE/IPAD and MAC; use client.p12 on WINDOWS and ANDROID. If the password is rejected, tell
      them to copy it with NO extra/trailing spaces — that is the usual cause.
    • Per device: iPHONE/iPAD — save the email attachment to Files, tap it, then Settings → General → VPN & Device
-     Management → identity certificate → Install → passcode → paste password → Next → Install → Done, restart, open
+     Management → identity certificate → Install → passcode → paste password → Next → Install → Done, open
      Safari. MAC — open the file, paste password, in Keychain Access (login) double-click the certificate in their name
-     and set Trust to Always Trust, restart. ANDROID — download and tap the file, paste password, install for VPN and
-     apps, restart, open Chrome. WINDOWS — open the file, Certificate Import Wizard, Next, paste password, store in
+     and set Trust to Always Trust. ANDROID — download and tap the file, paste password, install for VPN and
+     apps, open Chrome. WINDOWS — open the file, Certificate Import Wizard, Next, paste password, store in
      Personal, Finish, close and reopen the browser.
-   • RESTART the device after installing — this is the most-skipped step; without it the certificate is
-     not picked up. Then open lms.gmu.ac.ae/moodle in a WEB BROWSER (the Moodle mobile app is not supported).
+   • A RESTART is NOT normally needed. After installing, tell them to close and reopen the browser (or open a new
+     private window), then open lms.gmu.ac.ae/moodle in a WEB BROWSER (the Moodle mobile app is not supported).
+     Suggest restarting the device only as a last step if it still does not open.
    • Install separately on EACH device (laptop, tablet, phone).
-   • If it still fails after restarting: confirm it was installed on THIS device and that they are using a
+   • If it still fails: confirm it was installed on THIS device and that they are using a
      browser not the app. Windows — install it for their own user account, then close/reopen the browser;
      may also remove VPN and temporarily disable antivirus. Mac — in Keychain Access, ensure the certificate
      in their name is Trusted and remove expired ones. iPhone/iPad — remove any VPN and update iOS. If still
      unresolved, raise a ticket or visit the E-Learning Centre.
    • EXPIRED certificate: it cannot be renewed in place — a NEW one must be issued (username/password are
-     unchanged and are not the cause). Same request → install → restart flow.
+     unchanged and are not the cause). Same request → install flow.
 
 2) LOGIN PAGE APPEARS BUT CANNOT SIGN IN → tell them to click "Forgot Password", enter ONLY their
    registration number in the search box, and search; a reset email follows. If NO reset email arrives,
@@ -821,10 +829,11 @@ const RULES_BUILTIN = `CRITICAL FACTS (apply these precisely):
    "Try another way" to get the OTP on the registered mobile number, or on a device already signed into
    Gmail, open Manage Account → Security → 2-Step Verification, add the phone number, and receive the OTP there.
 
-5) TURNITIN, LMS LECTURES & ASSIGNMENTS → these are handled by Mr. Suraj. For Turnitin access/originality
-   reports, lecture content or recordings, and anything assignment-related (setup, submission or upload
-   problems, assignment grades), direct the student to contact Mr. Suraj at suraj@gmu.ac.ae, including their
-   name, student number, course and the exact issue. They may also raise a ticket to have it routed to him.
+5) TURNITIN → for Turnitin access, originality or similarity reports, direct the student to contact Mr. Suraj at
+   suraj@gmu.ac.ae with their name, student number, course and the exact issue (or raise a ticket).
+   LECTURES, COURSE MATERIALS & ASSIGNMENTS (instructions, deadlines, extensions, grades) → the student must
+   coordinate with their COURSE FACULTY. Do not route these to any support person. Only technical problems
+   (Moodle not opening, uploads failing) are handled here, with a ticket if unresolved.
 
 Never reveal the actual Wi-Fi password pattern as a fixed secret for another named person; explain the
 FORMAT so the student derives their own. Never ask for or display anyone's full password.
@@ -1081,7 +1090,7 @@ function autosize(el){el.style.height='auto';el.style.height=Math.min(el.scrollH
 /* ============================================================
    QUICK CHIPS
    ============================================================ */
-let CHIPS = ['Install identity certificate','No Moodle login page','Connect to Wi-Fi','Reset my password','Gradebook setup','Take attendance','Turnitin access','Assignment / lecture help'];
+let CHIPS = ['Install identity certificate','No Moodle login page','Connect to Wi-Fi','Reset my password','Gradebook setup','Take attendance','Turnitin access'];
 function renderChips(){
   const c=document.getElementById('chips');
   c.innerHTML='';
@@ -1119,14 +1128,6 @@ const FLOWS_BUILTIN = [
  {id:'pwd', title:'Password reset',
   trig:'reset password, reset my password, forgot password, forgotten password, forgot my password, password reset, change password, lost password, cannot remember my password',
   q:'I can help with that. Which account do you need to reset the password for?',
-  opts:`🎓 Moodle (MyGMU) => pwd_moodle
-📘 Folio => pwd_folio
-📧 University email (Google) => pwd_gmail
-🟦 Microsoft / official email => pwd_ms
-📶 Wi-Fi => wifi
-❓ I am not sure => pwd_unsure`},
- {id:'pwd_unsure', title:'Password reset',
-  q:'No problem. Which of these are you trying to sign in to?',
   opts:`🎓 Moodle (MyGMU) => pwd_moodle
 📘 Folio => pwd_folio
 📧 University email (Google) => pwd_gmail
@@ -1219,78 +1220,66 @@ Type all letters in **capitals**.`,
 
  {id:'cert', title:'Identity certificate',
   trig:'install identity certificate, no moodle login page, identity certificate, install certificate, install the certificate, no login page, profile not signed, p12',
-  q:'Moodle only opens on a device that has your personal identity certificate. Which device are you using?',
+  q:'Which device are you using?',
   opts:`📱 iPhone / iPad => cert_ios
 🤖 Android => cert_android
 🪟 Windows laptop => cert_win
-💻 Mac => cert_mac
-📨 I have not requested it yet => cert_request
-⌛ It expired or stopped working => cert_expired`},
+💻 Mac => cert_mac`},
  {id:'cert_ios', title:'Certificate on iPhone / iPad',
   trig:'certificate+iphone, certificate+ipad, certificate+ios',
   a:`**iPhone / iPad**
 
-1. Open your reply from identity@gmu.ac.ae ("Controlled System Access") and save the attached **clientlegacy.p12** to **Files**.
-2. Tap the file, then open **Settings, General, VPN & Device Management**, select the **identity certificate** and tap **Install**.
-3. Enter your passcode, then paste the certificate password from the email (no extra spaces). Tap **Next, Install, Done**.
-4. **Restart** the device, open **Safari** and go to {{moodle}}.
+1. If you do not have the certificate yet, email {{identity}} from your University email with the subject "LMS access". The reply ("Controlled System Access") carries the file and its password.
+2. Save the attached **clientlegacy.p12** to **Files** and tap it.
+3. Open **Settings, General, VPN & Device Management**, select the **identity certificate** and tap **Install**.
+4. Enter your passcode, paste the certificate password (no extra spaces), then tap **Next, Install, Done**.
+5. Open **Safari** and go to {{moodle}}.
 
 The Moodle app is not supported. Use a browser.`,
-  opts:`It still does not open => cert_fail`,
-  act:'guide:certificate:ios, video:ios, email, ticket'},
+  opts:`Still not opening => cert_fail`,
+  act:'guide:certificate:ios, video:ios, email:identity, ticket'},
  {id:'cert_android', title:'Certificate on Android',
   trig:'certificate+android, certificate+samsung',
   a:`**Android**
 
-1. Download the attachment from your certificate email (**client.p12**) and **tap it**, then open it with the installer.
-2. Paste the certificate password (no extra spaces) and install it for **VPN and apps**.
-3. **Restart**, open **Chrome** and go to {{moodle}}.`,
-  opts:`It still does not open => cert_fail`,
-  act:'guide:certificate:android, email, ticket'},
+1. If you do not have the certificate yet, email {{identity}} from your University email with the subject "LMS access".
+2. Download the attached **client.p12** and **tap it**, then open it with the installer.
+3. Paste the certificate password (no extra spaces) and install it for **VPN and apps**.
+4. Open **Chrome** and go to {{moodle}}.`,
+  opts:`Still not opening => cert_fail`,
+  act:'guide:certificate:android, email:identity, ticket'},
  {id:'cert_win', title:'Certificate on Windows',
   trig:'certificate+windows, certificate+laptop',
   a:`**Windows**
 
-1. Open **client.p12**, then in the Certificate Import Wizard select **Next**.
-2. Paste the certificate password (no extra spaces).
-3. Store the certificate in **Personal**, then select **Finish**.
-4. Close the browser completely and reopen it (restart the PC if it still fails), then go to {{moodle}}.`,
-  opts:`It still does not open => cert_fail`,
-  act:'guide:certificate:win, video:win, email, ticket'},
+1. If you do not have the certificate yet, email {{identity}} from your University email with the subject "LMS access".
+2. Open **client.p12**, then in the Certificate Import Wizard select **Next**.
+3. Paste the certificate password (no extra spaces).
+4. Store the certificate in **Personal**, then select **Finish**.
+5. Close the browser completely, reopen it and go to {{moodle}}.`,
+  opts:`Still not opening => cert_fail`,
+  act:'guide:certificate:win, video:win, email:identity, ticket'},
  {id:'cert_mac', title:'Certificate on Mac',
   trig:'certificate+mac, certificate+macbook, certificate+keychain',
   a:`**Mac**
 
-1. Download and open **clientlegacy.p12**, then paste the certificate password (no extra spaces).
-2. Open **Keychain Access** and select **login**. Double-click the certificate that carries your name, open **Trust** and choose **Always Trust**.
-3. **Restart**, open **Safari** and go to {{moodle}}.`,
-  opts:`It still does not open => cert_fail`,
-  act:'guide:certificate:mac, video:mac, email, ticket'},
- {id:'cert_request', title:'Request the identity certificate',
-  a:`Send an email **from your University email** to **{{identity}}** with the subject **LMS access**.
-
-You will receive a reply headed "Controlled System Access" with your certificate file and its password. It is issued to you alone, so never share or forward it.
-
-Remedial and BCPS students use the same certificate for {{moodleOnline}}.`,
-  opts:`Show me how to install it => cert`,
-  act:'email:identity, ticket'},
- {id:'cert_expired', title:'Expired identity certificate',
-  a:`An expired certificate cannot be renewed on the device. A **new one must be issued**; your username and password stay the same.
-
-Email **{{identity}}** from your University email with the subject **LMS access** and ask for a renewal. Remove the expired certificate, install the new one and **restart**.`,
-  opts:`Show me how to install it => cert`,
-  act:'email:identity, ticket'},
+1. If you do not have the certificate yet, email {{identity}} from your University email with the subject "LMS access".
+2. Open **clientlegacy.p12** and paste the certificate password (no extra spaces).
+3. Open **Keychain Access** and select **login**. Double-click the certificate that carries your name, open **Trust** and choose **Always Trust**.
+4. Open **Safari** and go to {{moodle}}.`,
+  opts:`Still not opening => cert_fail`,
+  act:'guide:certificate:mac, video:mac, email:identity, ticket'},
  {id:'cert_fail', title:'Certificate installed but Moodle will not open',
   a:`Please check each point:
-1. You **restarted** the device after installing (the most-skipped step).
-2. The certificate is installed on **this** device. Each device needs its own copy.
-3. You are using a **web browser**, not the Moodle app.
-4. **Windows:** install it for your own user account, close and reopen the browser, and try removing any VPN or temporarily disabling antivirus.
-5. **Mac:** in Keychain Access make sure the certificate in your name is Trusted and remove any expired ones.
-6. **iPhone / iPad:** remove any VPN and update to the latest iOS.
+1. The certificate is installed on **this** device. Each device needs its own copy.
+2. You are using a **web browser**, not the Moodle app. Close and reopen the browser first.
+3. The certificate has not **expired**. If it has, a new one must be issued (your username and password stay the same).
+4. If it still does not open, restart the device once.
 
-If it still fails, a support representative will help you.`,
-  act:'email, ticket'}
+**Windows:** install it for your own user account and remove any VPN, or temporarily disable antivirus. **Mac:** make sure the certificate in your name is Trusted and delete expired ones. **iPhone / iPad:** remove any VPN and update iOS.
+
+If nothing works, a support representative will help you.`,
+  act:'email:identity, email, ticket'}
 ];
 
 /* ============================================================
@@ -1971,7 +1960,6 @@ FLOWS.certificate={
   {t:'Paste the password',cap:'<b>Copy the password</b> from the email and paste it here — <b>no extra spaces</b>. Tap <b>Next</b>.',s:iCertPassword},
   {t:'Install again',cap:'Tap <b>Install</b> once more to confirm.',s:()=>iInstall(true)},
   {t:'Done',cap:'<b>Profile Installed</b> — tap <b>Done</b>.',s:iInstalled},
-  {t:'Restart the iPhone',cap:'<b>Restart your iPhone.</b> This step is often skipped — the certificate is not picked up without it.',s:iRestart},
   {t:'Open Moodle in Safari',cap:'Open <b>Safari</b> and go to <b>lms.gmu.ac.ae/moodle</b>. The login page now appears — sign in with your student number.',s:()=>iSafari(webLogin('ios'),true)}
  ],
  android:[
@@ -1983,7 +1971,6 @@ FLOWS.certificate={
   {t:'Paste the password',cap:'<b>Paste the password</b> from the email (no extra spaces) and tap <b>OK</b>.',s:aExtract},
   {t:'Install as VPN and apps',cap:'Name it <b>identity certificate</b>, choose <b>VPN and apps</b> and tap <b>OK</b>.',s:aName},
   {t:'Installed',cap:'Android confirms the certificate is <b>installed</b>.',s:()=>aFiles(true)},
-  {t:'Restart the phone',cap:'<b>Restart the phone</b> so the certificate is picked up.',s:aRestart},
   {t:'Open Moodle in Chrome',cap:'Open <b>Google Chrome</b> and go to <b>lms.gmu.ac.ae/moodle</b> — the login page appears.',s:()=>aChrome(webLogin('android'),true)}
  ],
  win:[
@@ -1996,7 +1983,7 @@ FLOWS.certificate={
   {t:'Choose the store',cap:'Select <b>Place all certificates in the following store</b> and choose <b>Personal</b>. Click <b>Next</b>.',s:()=>wWizard(4)},
   {t:'Finish',cap:'Click <b>Finish</b>.',s:()=>wWizard(5)},
   {t:'Import successful',cap:'<b>The import was successful.</b> Click <b>OK</b>.',s:wSuccess},
-  {t:'Reopen the browser',cap:'<b>Close the browser completely and open it again</b> (or restart the PC). Go to <b>lms.gmu.ac.ae/moodle</b> — the login page appears.',s:()=>wChrome('lms.gmu.ac.ae/moodle','GMU Moodle',webLogin('win'),true)}
+  {t:'Reopen the browser',cap:'<b>Close the browser completely and open it again</b> Go to <b>lms.gmu.ac.ae/moodle</b> — the login page appears.',s:()=>wChrome('lms.gmu.ac.ae/moodle','GMU Moodle',webLogin('win'),true)}
  ],
  mac:[
   {t:'Request the certificate',cap:'From your <b>University email</b>, write to <b>identity@gmu.ac.ae</b> with the subject <b>LMS access</b> and click <b>Send</b>.',s:()=>gmailBrowser('mac','compose',CERT_FILE_APPLE)},
@@ -2006,7 +1993,6 @@ FLOWS.certificate={
   {t:'Open Keychain Access',cap:'Open <b>Keychain Access</b>, select the <b>login</b> keychain and <b>double-click the certificate in your name</b>.',s:mKeychain},
   {t:'Trust the certificate',cap:'Open <b>Trust</b> and set <b>When using this certificate</b> to <b>Always Trust</b>.',s:mTrust},
   {t:'Confirm',cap:'Enter your Mac password and click <b>Update Settings</b>.',s:mAuth},
-  {t:'Restart the Mac',cap:'<b>Restart your Mac</b> (Apple menu → Restart) so the certificate is picked up.',s:mRestart},
   {t:'Open Moodle in Safari',cap:'Open <b>Safari</b> and go to <b>lms.gmu.ac.ae/moodle</b> — the login page appears.',s:()=>mSafari('lms.gmu.ac.ae',webLogin('mac'),true)}
  ]
 };
@@ -2316,7 +2302,8 @@ function showNotice(t){
 function applyKnowledge(d){
   if(!d||!d.ok) return false;
   const s=d.settings||{};
-  ['ticket','portal','videos','moodle','moodleOnline','support','identity','suraj','phone'].forEach(function(k){if(s[k])LINKS[k]=s[k]});
+  ['portal','videos','moodle','moodleOnline','support','identity','suraj','phone'].forEach(function(k){if(s[k])LINKS[k]=s[k]});
+  if(s.logo && s.logo!==LOGO_URL) setLogo(s.logo);
   if(s.video_ios) VIDEOS.ios.embed=s.video_ios;
   if(s.video_mac) VIDEOS.mac.embed=s.video_mac;
   if(s.video_win) VIDEOS.win.embed=s.video_win;
@@ -2361,8 +2348,18 @@ function startKnowledgeSync(){
 /* ============================================================
    INIT
    ============================================================ */
+const LOGO_URL='logo.png';   // put the official Gulf Medical University logo file next to index.html (or set a full URL / the 'logo' row in the Settings tab)
+function setLogo(url){
+  const img=document.getElementById('uniLogo'), plate=img.parentNode, rl=document.getElementById('regLogo'), ri=document.getElementById('regLogoImg');
+  const t=new Image();
+  t.onload=function(){img.src=url;ri.src=url;plate.classList.add('has');rl.classList.add('has')};
+  t.onerror=function(){logoFallback()};
+  t.src=url;
+}
+function logoFallback(){const pl=document.getElementById('uniLogo');if(pl){pl.parentNode.classList.remove('has');document.getElementById('regLogo').classList.remove('has')}}
 function init(){
   currentOS=detectOS(); G.os=currentOS;
+  setLogo(LOGO_URL);
   renderChips();
   startKnowledgeSync();
   initAdmin();
