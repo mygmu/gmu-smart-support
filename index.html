@@ -89,6 +89,13 @@ header.top{
 .stbox .acts button{border:none;border-radius:10px;padding:9px 16px;font-weight:600;cursor:pointer;background:var(--navy);color:#fff}
 .stbox .acts button.alt{background:#e8edf2;color:var(--navy)}
 .suggest{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.flowopts.used{opacity:.4;pointer-events:none}
+.actrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.abtn.go{color:#0a6b4b;background:#e6f6ef;border-color:#b6e2d0}.abtn.go:hover{background:#0a6b4b;color:#fff}
+.abtn.mail{color:#003057;background:#e8f0fa;border-color:#bcd2ec}.abtn.mail:hover{background:#003057;color:#fff}
+.abtn.tkt{color:#9a5a00;background:#fff4e0;border-color:#f1d29a}.abtn.tkt:hover{background:#c9861a;color:#fff}
+.abtn.vid{color:#c0392b;background:#fff0f0;border-color:#f3c4c0}
+.startover{margin-top:10px;font-size:13px}.startover a{color:#6b7a8a;text-decoration:none}.startover a:hover{color:var(--teal)}
 .typing span{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:bob 1.1s infinite}
 .typing span:nth-child(2){animation-delay:.15s}
 .typing span:nth-child(3){animation-delay:.3s}
@@ -401,6 +408,98 @@ header.top{
   .main.hasguide .right{position:fixed;inset:0;width:auto;z-index:900}
   .pill.hide-s{display:none}
 }
+
+/* ===================== AI AGENT THEME (GMU colours) =====================
+   Tokens: navy #003057 · deep #021d36 · blue #005587 · teal #007B8A / glow #27d3e6 · gold #C9A227 */
+:root{--deep:#021d36;--glow:#27d3e6;--glow2:#00b5c9;--ring:0 0 0 3px rgba(39,211,230,.45)}
+body{background:
+  radial-gradient(900px 420px at 8% -8%,rgba(39,211,230,.16),transparent 62%),
+  radial-gradient(800px 420px at 100% 0%,rgba(201,162,39,.13),transparent 58%),
+  linear-gradient(135deg,#eaf2f7,#e0edf2)}
+button:focus-visible,.chip:focus-visible,.pill:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,.dtab:focus-visible{outline:3px solid var(--glow);outline-offset:2px}
+
+/* header: console bar with moving scan line */
+header.top{background:linear-gradient(100deg,var(--deep) 0%,var(--navy) 55%,var(--navy2) 100%);position:relative;overflow:hidden;border-bottom:1px solid rgba(39,211,230,.45)}
+header.top::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;
+  background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:26px 26px;-webkit-mask-image:linear-gradient(90deg,transparent 5%,#000 45%,transparent 95%);mask-image:linear-gradient(90deg,transparent 5%,#000 45%,transparent 95%)}
+header.top::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:35%;background:linear-gradient(90deg,transparent,var(--glow),var(--gold),transparent);animation:scan 5s linear infinite}
+@keyframes scan{from{transform:translateX(-100%)}to{transform:translateX(300%)}}
+header.top>*{position:relative;z-index:1}
+.logo-badge{box-shadow:0 0 0 2px rgba(201,162,39,.65),0 6px 18px rgba(0,0,0,.35)}
+.top h1{letter-spacing:.2px}
+.agent-status{display:flex;align-items:center;gap:7px;font-size:12px;color:#bfe9f0;margin-top:2px}
+.agent-status .dot{width:7px;height:7px}
+.agent-status b{color:#fff;font-weight:600}
+.agent-status .tag{border:1px solid rgba(39,211,230,.5);color:#9ff0fb;border-radius:20px;padding:1px 8px;font-size:10.5px;letter-spacing:.6px;text-transform:uppercase}
+.pill{min-height:34px;background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.28);backdrop-filter:blur(6px)}
+.pill svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.pill:hover{background:rgba(39,211,230,.22);border-color:var(--glow)}
+
+/* agent avatar = glowing orb with spark */
+.msg.bot .av{font-size:0;position:relative;background:radial-gradient(circle at 32% 28%,#8ff3ff,var(--glow2) 42%,var(--navy) 88%);
+  box-shadow:0 0 0 2px #fff,0 0 16px rgba(39,211,230,.65);animation:orb 4.5s ease-in-out infinite}
+.msg.bot .av::after{content:"";position:absolute;inset:0;margin:auto;width:16px;height:16px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 2l2.2 6.3L20.5 10l-6.3 2.2L12 18.5 9.8 12.2 3.5 10l6.3-1.7z'/%3E%3Cpath d='M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z'/%3E%3C/svg%3E") center/contain no-repeat}
+@keyframes orb{0%,100%{box-shadow:0 0 0 2px #fff,0 0 12px rgba(39,211,230,.55)}50%{box-shadow:0 0 0 2px #fff,0 0 22px rgba(39,211,230,.95)}}
+.msg.user .av{background:linear-gradient(135deg,var(--gold),#a7851c);box-shadow:0 0 0 2px #fff}
+
+/* bubbles: glass card with gradient edge */
+.msg.bot .bubble{border:1px solid transparent;border-radius:6px 18px 18px 18px;
+  background:linear-gradient(#fff,#fff) padding-box,linear-gradient(135deg,rgba(39,211,230,.75),rgba(0,48,87,.18) 55%,rgba(201,162,39,.6)) border-box;
+  box-shadow:0 8px 26px rgba(0,48,87,.10)}
+.msg.user .bubble{border-radius:18px 6px 18px 18px;background:linear-gradient(135deg,var(--navy),var(--navy2) 60%,var(--teal));box-shadow:0 8px 22px rgba(0,48,87,.25)}
+.bubble i{color:#335066}
+.caret{background:var(--glow2);box-shadow:0 0 8px var(--glow)}
+.typing span{background:linear-gradient(135deg,var(--glow2),var(--gold))}
+.tstat{background:linear-gradient(90deg,#4b6074 20%,var(--glow2) 50%,#4b6074 80%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 1.8s linear infinite}
+@keyframes shimmer{to{background-position:-200% 0}}
+
+/* chips = capability cards */
+.chips{padding-bottom:12px}
+.chip{min-height:38px;display:inline-flex;align-items:center;border-radius:12px;background:rgba(255,255,255,.85);backdrop-filter:blur(4px);
+  border:1px solid rgba(0,123,138,.35);font-size:13px;font-weight:600;color:var(--navy);box-shadow:0 2px 8px rgba(0,48,87,.06)}
+.chip:hover{background:linear-gradient(135deg,var(--teal),var(--navy2));box-shadow:0 6px 18px rgba(0,123,138,.35)}
+
+/* composer = command bar */
+.composer{background:rgba(255,255,255,.78);backdrop-filter:blur(10px);border-top:1px solid rgba(39,211,230,.35)}
+.composer textarea{border-color:rgba(0,48,87,.22);background:#fff}
+.composer textarea:focus{border-color:var(--glow2);box-shadow:var(--ring)}
+.send{background:linear-gradient(135deg,var(--glow2),var(--navy2));box-shadow:0 6px 18px rgba(0,181,201,.45)}
+.send svg,.mic svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* action buttons: icon + label */
+.abtn{min-height:40px;border-radius:12px;font-weight:600}
+.abtn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-right:6px;flex-shrink:0}
+.satis{background:linear-gradient(90deg,#fff7e0,#eefafc)}
+
+/* ===================== REGISTRATION (mandatory profile) ===================== */
+#roleModal{background:radial-gradient(800px 500px at 50% 0%,rgba(39,211,230,.22),transparent 60%),rgba(2,29,54,.88)}
+.reg-box{background:#fff;border-radius:20px;width:min(520px,96vw);max-height:94vh;overflow:auto;padding:0;box-shadow:0 30px 90px rgba(0,0,0,.55);animation:zoom .3s;color:var(--ink)}
+.reg-head{padding:22px 26px 16px;background:linear-gradient(110deg,var(--deep),var(--navy) 60%,var(--navy2));color:#fff;border-radius:20px 20px 0 0;position:relative;overflow:hidden}
+.reg-head::after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(39,211,230,.55),transparent 70%)}
+.reg-head h2{font-size:20px;margin:0 0 4px;position:relative}
+.reg-head p{font-size:13px;opacity:.88;line-height:1.5;margin:0;position:relative}
+.reg-body{padding:18px 26px 22px}
+.reg-box label{font-size:13px;font-weight:600;color:var(--navy);display:block;margin:12px 0 5px}
+.reg-box label .req{color:#c0392b;margin-left:3px}
+.reg-box input[type=text],.reg-box select{width:100%;min-height:46px;padding:10px 12px;border:1.5px solid #c5d3df;border-radius:11px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+.reg-box input:focus,.reg-box select:focus{outline:none;border-color:var(--glow2);box-shadow:var(--ring)}
+.reg-box .bad{border-color:#c0392b!important}
+.reg-box .hint{font-size:12px;color:var(--muted);margin-top:4px}
+.reg-box .err{font-size:12.5px;color:#b3261e;margin-top:4px;display:none}
+.reg-box .err.show{display:block}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{margin:0;text-align:center;padding:11px 6px;border:1.5px solid #c5d3df;border-radius:11px;cursor:pointer;font-size:14px;font-weight:600;min-height:46px;display:grid;place-items:center}
+.seg input:checked+label{background:linear-gradient(135deg,var(--navy),var(--teal));color:#fff;border-color:transparent;box-shadow:0 6px 16px rgba(0,123,138,.35)}
+.seg input:focus-visible+label{outline:3px solid var(--glow);outline-offset:2px}
+.reg-go{width:100%;margin-top:18px;min-height:50px;border:none;border-radius:13px;font-size:15.5px;font-weight:700;color:#fff;cursor:pointer;
+  background:linear-gradient(135deg,var(--glow2),var(--navy2));box-shadow:0 8px 22px rgba(0,181,201,.4);transition:.2s}
+.reg-go:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.reg-cancel{background:none;border:none;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:13px;margin-top:8px;display:none;width:100%;min-height:40px}
+.reg-note{font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -408,17 +507,17 @@ header.top{
 
   <!-- ===================== HEADER ===================== -->
   <header class="top">
-    <div class="logo-badge">GMU</div>
+    <div class="logo-badge" aria-hidden="true">GMU</div>
     <div>
-      <h1>Smart Support Assistant</h1>
-      <div class="sub">AI-assisted IT &amp; Student Support — Gulf Medical University</div>
+      <h1>GMU AI Support Agent</h1>
+      <div class="agent-status"><span class="dot" aria-hidden="true"></span><b>Online</b><span class="tag">AI-assisted</span><span>IT &amp; Student Support · Gulf Medical University</span></div>
     </div>
     <div class="spacer"></div>
-    <div class="pill" onclick="openTicket()"><span class="dot"></span> Raise a Ticket</div>
-    <label class="pill" title="Read answers aloud" style="cursor:pointer"><input type="checkbox" id="ttsToggle" style="accent-color:#00b5c9" onchange="track('read_aloud',{detail:this.checked?'on':'off'})"> 🔊 Read aloud</label>
-    <div class="pill" id="rolePill" onclick="openRole()" title="Change who you are">👤 Select role</div>
-    <div class="pill aipill" id="aiPill" onclick="openAIStatus()" title="AI connection status (admin only)"><span class="dot"></span> <span id="aiPillTxt">AI…</span></div>
-    <div class="pill" onclick="openPortal()">Support Portal</div>
+    <div class="pill" role="button" tabindex="0" onclick="openTicket()" aria-label="Raise a ticket"><svg viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 0 0 6v3a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-3a2 2 0 0 1 0-6V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1z"/><path d="M14 5v14" stroke-dasharray="2 3"/></svg> Raise a Ticket</div>
+    <label class="pill" title="Read answers aloud" style="cursor:pointer"><input type="checkbox" id="ttsToggle" style="accent-color:#00b5c9" onchange="track('read_aloud',{detail:this.checked?'on':'off'})"> <svg viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg> Read aloud</label>
+    <div class="pill" id="rolePill" role="button" tabindex="0" onclick="openRole()" title="View or change your details">Profile</div>
+    <div class="pill aipill" id="aiPill" role="button" tabindex="0" onclick="openAIStatus()" title="AI connection status (admin only)"><span class="dot"></span> <span id="aiPillTxt">AI…</span></div>
+    <div class="pill" role="button" tabindex="0" onclick="openPortal()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg> Support Portal</div>
   </header>
   <div class="notice" id="notice"></div>
 
@@ -434,6 +533,7 @@ header.top{
         <span><b>Did this solve your issue?</b> If not, raise a ticket and a support representative will contact you directly.</span>
         <button onclick="feedback(true)">👍 Yes</button>
         <button onclick="feedback(false)">👎 No</button>
+        <a href="#" onclick="openEmail('support');return false">Email support ✉</a>
         <a href="#" onclick="openTicket('after_answer');return false">Raise a Ticket →</a>
       </div>
 
@@ -444,11 +544,11 @@ header.top{
       </div>
 
       <div class="composer">
-        <button class="mic" id="micBtn" onclick="toggleMic()" title="Speak your question" aria-label="Speak your question">🎤</button>
+        <button class="mic" id="micBtn" onclick="toggleMic()" title="Speak your question" aria-label="Speak your question"><svg viewBox="0 0 24 24" style="stroke:currentColor"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
         <textarea id="input" rows="1" placeholder="Type or tap the mic to speak your question…"
           onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"
           oninput="autosize(this)"></textarea>
-        <button class="send" id="sendBtn" onclick="sendMsg()">➤</button>
+        <button class="send" id="sendBtn" onclick="sendMsg()" aria-label="Send message"><svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg></button>
       </div>
     </div>
 
@@ -508,31 +608,40 @@ header.top{
 </div>
 
 <!-- ===================== ROLE PICKER ===================== -->
-<div class="modal-overlay" id="roleModal">
-  <div class="role-box">
-    <h2>Welcome to GMU Smart Support</h2>
-    <p>To help us improve our support services, please tell us who is using the assistant. No name, email or password is collected.</p>
-    <label for="collegeSel">College / programme (optional)</label>
-    <select id="collegeSel">
-      <option value="">— Select —</option>
-      <option>College of Medicine</option>
-      <option>College of Dentistry</option>
-      <option>College of Pharmacy</option>
-      <option>College of Nursing</option>
-      <option>College of Health Sciences</option>
-      <option>College of Management &amp; AI</option>
-      <option>Remedial / BCPS (Online)</option>
-      <option>Administration / Support Units</option>
-    </select>
-    <label>I am a…</label>
-    <div class="role-grid">
-      <button onclick="pickRole('Student')">🎓<br>Student</button>
-      <button onclick="pickRole('Faculty')">👩‍🏫<br>Faculty</button>
-      <button onclick="pickRole('Staff')">💼<br>Staff</button>
+<div class="modal-overlay" id="roleModal" role="dialog" aria-modal="true" aria-labelledby="regTitle">
+  <form class="reg-box" id="regForm" novalidate onsubmit="return submitProfile(event)">
+    <div class="reg-head">
+      <h2 id="regTitle">Welcome to the GMU AI Support Agent</h2>
+      <p>Please introduce yourself so I can personalise your support and pre-fill your requests. All fields are required to continue.</p>
     </div>
-    <div class="role-note">Your questions are recorded anonymously so the IT &amp; E-Learning team can see which topics need attention. Please never type your password or certificate password in the chat.</div>
-    <button class="role-skip" onclick="pickRole('Not specified')">Skip for now</button>
-  </div>
+    <div class="reg-body">
+      <label id="lblRole">I am a<span class="req" aria-hidden="true">*</span></label>
+      <div class="seg" role="radiogroup" aria-labelledby="lblRole">
+        <input type="radio" name="regRole" id="rStudent" value="Student" onchange="regRoleChanged()"><label for="rStudent">Student</label>
+        <input type="radio" name="regRole" id="rFaculty" value="Faculty" onchange="regRoleChanged()"><label for="rFaculty">Faculty</label>
+        <input type="radio" name="regRole" id="rStaff" value="Staff" onchange="regRoleChanged()"><label for="rStaff">Staff</label>
+      </div>
+      <div class="err" id="eRole" role="alert">Please choose Student, Faculty or Staff.</div>
+
+      <label for="regName">Full name<span class="req" aria-hidden="true">*</span></label>
+      <input type="text" id="regName" autocomplete="name" maxlength="80" placeholder="As on your University ID" aria-describedby="eName" onblur="validateProfile(true)" oninput="validateProfile(false)">
+      <div class="err" id="eName" role="alert">Please enter your full name (at least 3 characters).</div>
+
+      <label for="regId" id="lblId">Registration number<span class="req" aria-hidden="true">*</span></label>
+      <input type="text" id="regId" autocomplete="username" maxlength="24" autocapitalize="characters" placeholder="e.g. your student number" aria-describedby="hId eId" onblur="validateProfile(true)" oninput="validateProfile(false)">
+      <div class="hint" id="hId">Your username on Moodle / Folio. Letters and numbers only.</div>
+      <div class="err" id="eId" role="alert">Please enter a valid ID (3 to 24 letters or numbers).</div>
+
+      <label for="regUnit" id="lblUnit">Programme<span class="req" aria-hidden="true">*</span></label>
+      <select id="regUnit" aria-describedby="eUnit" onchange="regUnitChanged();validateProfile(true)"></select>
+      <input type="text" id="regUnitOther" maxlength="60" placeholder="Type your programme or department" style="display:none;margin-top:8px" aria-label="Other programme or department" oninput="validateProfile(false)">
+      <div class="err" id="eUnit" role="alert">Please choose your programme or department.</div>
+
+      <button type="submit" class="reg-go" id="regGo" disabled>Continue</button>
+      <button type="button" class="reg-cancel" id="regCancel" onclick="closeRole()">Cancel</button>
+      <div class="reg-note">Your name, ID and programme are saved in GMU's IT &amp; E-Learning support sheet so the team can help you faster and see which topics need attention. Never type your password or certificate password in the chat.</div>
+    </div>
+  </form>
 </div>
 
 <script>
@@ -545,7 +654,7 @@ const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbxImt9pOkPMY7ryEZbP
 
 /* ----- LINKS ----- */
 const LINKS = {
-  ticket  : 'https://forms.gle/qFccSMoNzy5egfBL7',
+  ticket  : 'https://mygmu.github.io/gmu-support/',
   portal  : 'https://support.mygmu.ac.ae',
   videos  : 'https://www.youtube.com/@gmu-E-Learning-Center',
   moodle  : 'https://lms.gmu.ac.ae/moodle',
@@ -568,7 +677,7 @@ const KB_BUILTIN = [
   {
     id:'wifi', cat:'Wi-Fi', anim:'wifi',
     kw:['wifi','wi-fi','internet','network','gmu-students','connect wifi','wireless','wifi password','wifi login'],
-    a:"To connect to GMU Wi-Fi:\n1. Open **Settings → Wi-Fi** and select the **GMU-Students** network.\n2. Enter your Wi-Fi username and password. The format depends on your batch — may I ask **which batch you are in**?\n\n**First-year (2026 batch):**\n• Username: your **registration number**\n• Password: **GMU@<year of birth>** (e.g. GMU@2004)\n\n**Earlier batches:**\n• Username: your **registration number**\n• Password: **<registration number>@<year of birth>**\n\nType all **letters in CAPITALS**. If you are first-year and it does not work, try the password once in **capitals** and once in **lowercase**. If it still fails, please raise a ticket and we will assist you."
+    a:"To connect to GMU Wi-Fi:\n1. Open **Settings → Wi-Fi** and select the **GMU-Students** network.\n2. Enter your Wi-Fi username and password. The format depends on your batch — may I ask **which batch you are in**?\n\n**First-year (2026 batch):**\n• Username: your **registration number**\n• Password: **GMU@<year of birth>** (e.g. GMU@2004)\n\n**Second year onwards:**\n• Username: your **registration number**\n• Password: **<registration number>@<year of birth>**\n\nType all **letters in CAPITALS**. If you are first-year and it does not work, try the password once in **capitals** and once in **lowercase**. If it still fails, please raise a ticket and we will assist you."
   },
   {
     id:'moodle_login', cat:'Moodle', anim:'moodle',
@@ -616,9 +725,34 @@ const KB_BUILTIN = [
     a:"For **LMS lectures, course materials, and assignment-related matters** (including lecture recordings and assignment submission or upload problems), please contact **Mr. Suraj** at <a href='mailto:suraj@gmu.ac.ae'>suraj@gmu.ac.ae</a>.\n\nWhen you write, include your **name, student number, course, and the exact issue** (for example, the assignment name and any error message). You can also raise a ticket and it will be routed to him.\n\nTip: if an assignment will not upload, first check the file type and size limits shown on the submission page and try a stable internet connection before reporting it."
   },
   {
+    id:'web_gradebook', cat:'Moodle (Teaching) — Gradebook', anim:'',
+    kw:['gradebook','grade book','grade categories','grade category','aggregation','weighted mean','natural weighting','drop the lowest','gradebook setup','grader report','total grade','course total'],
+    a:"**Setting up the Moodle gradebook**\n1. Open your course, then **Gradebook setup** from the grades menu.\n2. Select **Add**, choose **Add category** and give it a clear name (for example *Quizzes* or *Assignments*).\n3. Pick the **aggregation method** (how the category total is calculated). *Natural* or *Weighted mean* are the most common.\n4. Decide how empty grades count: with **Aggregate only non-empty grades** OFF, a missing grade counts as 0; ON ignores it.\n5. Use **Drop the lowest** or **Keep the highest**, not both.\n6. Select **Save changes**, then drag items into the right category.\n\n**Good to know:** each grade item belongs to one category; categories can be nested. A blank grade can mean not submitted, not yet graded, or deleted, so check before assuming it is zero. Some settings may be locked site-wide.\n\n*Source: docs.moodle.org (Grade categories). Screens can differ slightly by Moodle version. If something does not match, raise a ticket.*"
+  },
+  {
+    id:'web_attendance', cat:'Moodle (Teaching) — Attendance', anim:'',
+    kw:['attendance','take attendance','attendance sessions','mark attendance','attendance report','attendance activity','absent','present late','self recording attendance','attendance qr'],
+    a:"**Taking attendance in Moodle**\n1. **Turn editing on**, select **Add an activity or resource** and choose **Attendance**. Name it (for example *Lecture Attendance*).\n2. **Settings → Status set:** the defaults are Present, Absent, Late and Excused. You can rename them or change their points.\n3. **Add session:** tick *Create multiple sessions* for recurring classes. Enter the first date, time and duration, the last date and the class days.\n4. **Take attendance:** on the Attendance tab, select the green icon beside the session, set a status for each student (click a status heading to set everyone), add remarks, and save.\n5. **Self-recording (optional):** share a session password or QR code so students mark themselves present.\n6. **Reports:** open the Export tab, choose the session and a format.\n\nIf students show in red across all groups, check for temporary users and remove them.\n\n*Source: docs.moodle.org (Attendance activity). Screens can differ slightly by Moodle version. If something does not match, raise a ticket.*"
+  },
+  {
+    id:'web_assignment', cat:'Moodle (Teaching) — Assignment', anim:'',
+    kw:['assignment','create assignment','assignment settings','due date','cut-off date','cut off date','submission types','assignment grading','feedback files','marking workflow','anonymous submission','resubmit','allow submissions from'],
+    a:"**Creating an assignment in Moodle**\n1. **Turn editing on → Add an activity or resource → Assignment.**\n2. Add the name and instructions (tick *Display description on course page* if needed).\n3. **Availability:** *Allow submissions from* (blocks earlier submissions), *Due date* (later work is accepted but marked late), *Cut-off date* (the submit button disappears), and *Remind me to grade by* (needed for it to show in the Timeline and Calendar).\n4. **Submission types:** online text (optional word limit) and/or file upload (file number, size and accepted types).\n5. **Feedback types:** comments, feedback files, inline comments, offline grading worksheet.\n6. **Require students to click the submit button:** *Yes* keeps work as a draft until submitted.\n7. Set the **grade**, attempts allowed, marking workflow or anonymous submissions if required, then **Save**.\n\n*Source: docs.moodle.org (Assignment settings). Screens can differ slightly by Moodle version. If something does not match, raise a ticket.*"
+  },
+  {
+    id:'web_assignment_submit', cat:'Moodle (Teaching) — Assignment submission problems', anim:'',
+    kw:['cannot submit','can\'t submit','no submit button','submit button missing','file rejected','assignment late','cannot edit submission','submission statement','assignment upload','upload failed','submit assignment','group submission'],
+    a:"**Student cannot submit an assignment? Check these:**\n• **Cannot submit yet:** the *Allow submissions from* date has not arrived.\n• **No submit button:** the *Cut-off date* has passed.\n• **Marked late:** the work was submitted after the due date or time limit.\n• **File rejected:** the file type is not accepted or it is larger than the size limit.\n• **Cannot edit:** the work is already submitted or the attempts are used up. The teacher can revert the submission to draft.\n• **Group assignment blocked:** the student is not in a group, or required group members have not submitted.\n• **Cannot submit:** a required *submission statement* has not been accepted.\n\nStudents with a due-date problem should contact their teacher. For an Assignment set-up or upload problem that persists, contact Mr. Suraj at {{suraj}} with your name, student number, course and the exact issue.\n\n*Source: docs.moodle.org (Assignment settings).*"
+  },
+  {
+    id:'web_quiz', cat:'Moodle (Teaching) — Quiz', anim:'',
+    kw:['quiz','create quiz','quiz settings','time limit','attempts allowed','question behaviour','review options','question bank','quiz timing','quiz grade method','deferred feedback','interactive with multiple tries'],
+    a:"**Creating a quiz in Moodle**\n1. **Turn editing on → Add an activity or resource → Quiz**, then set its options.\n2. **Timing:** optional *Open* and *Close* dates. Attempts cannot start before opening, and answers submitted after closing are not marked.\n3. **Time limit:** a countdown that automatically submits the attempt when time is up.\n4. **Attempts allowed** and the **grading method** for several attempts (highest, average, first or last).\n5. **Question behaviour:** *Deferred feedback* is like a traditional exam; *Interactive with multiple tries* gives immediate feedback and retries.\n6. **Review options:** choose what students see and when. Enable *The attempt* first; the other options depend on it.\n7. **Save**, then **Edit quiz** to add questions from the question bank.\n\n**Common issues:** the time zone changes only how times are displayed; user overrides beat group overrides; once attempts exist the question set is locked; quizzes with a time limit cannot be attempted offline in the mobile app.\n\n*Source: docs.moodle.org (Quiz settings). Screens can differ slightly by Moodle version. If something does not match, raise a ticket.*"
+  },
+  {
     id:'folio', cat:'Folio', anim:'folio',
     kw:['folio','registration','register semester','transcript','grades','class register','student record','timetable'],
-    a:"Folio is the student information system for registration and records.\n1. Log in to **Folio** with your GMU credentials.\n2. Use **Semester Registration** to enrol in courses, then request department approval.\n3. View **grades** and download your **transcript** from your profile.\n\nIf you can't log in to Folio, reset your password first; if a registration won't approve, that step is handled by your college department."
+    a:"Folio is the student information system for registration and records.\n1. Log in to **Folio** with your GMU credentials.\n2. Use **Semester Registration** to enrol in courses, then request department approval.\n3. View **grades** and download your **transcript** from your profile.\n\nThe **default Folio password is your date of birth in numbers: day, month, year (DDMMYYYY)**, for example 05031999 for 5 March 1999. If it does not work, raise a ticket so the support team can reset it. If a registration won't approve, that step is handled by your college department."
   },
   {
     id:'onboarding', cat:'Onboarding', anim:'onboard',
@@ -672,7 +806,7 @@ const RULES_BUILTIN = `CRITICAL FACTS (apply these precisely):
 3) WI-FI CREDENTIALS depend on batch — ALWAYS ASK which batch first if unknown:
    • First-year (2026 batch): username = registration number; password = GMU@<year of birth>.
      If it fails, have them try the password in CAPITALS and also in lowercase.
-   • Earlier batches: username = registration number; password = <registration number>@<year of birth>.
+   • Second year onwards (all batches before 2026): username = registration number; password = <registration number>@<year of birth>.
    • Type all letters in CAPITALS by default.
 
 4) EMAIL / MICROSOFT: for a University-issued MICROSOFT account password, self-service reset shows "ask
@@ -790,28 +924,108 @@ function logLocal(q,a,cat,src){          // answers that did not come from the A
   try{
     fetch(BACKEND_URL,{method:'POST',mode:'no-cors',keepalive:true,
       headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify({action:'log',name:'Anonymous',role:userRole,category:cat,question:q,
+      body:JSON.stringify({action:'log',name:who(),role:userRole,category:cat,question:q,
         answer:String(a).replace(/<[^>]+>/g,' ').slice(0,1500),
         status:src==='none'?'Unanswered':'KB-Answered',source:src==='none'?'none':'local-kb'})
     }).catch(function(){});
   }catch(e){}
 }
+
+/* ---------------- mandatory profile (name, ID, programme/department) ---------------- */
+let PROFILE={role:'',name:'',id:'',unit:''};
+const UNITS=[
+ ['Programmes / colleges',['College of Medicine','College of Dentistry','College of Pharmacy','College of Nursing','College of Health Sciences','College of Management & AI','Remedial / BCPS (Online)','Foundation / Pre-medical']],
+ ['Departments / units',['IT & E-Learning','Registrar\'s Office','Student Affairs','Finance','Admissions','Human Resources','Library','Administration / Support Units']]
+];
+function buildUnitSelect(){
+  const sel=document.getElementById('regUnit'); if(sel.options.length) return;
+  sel.innerHTML='<option value="">Select…</option>'+UNITS.map(g=>'<optgroup label="'+g[0]+'">'+g[1].map(u=>'<option>'+u.replace(/&/g,'&amp;')+'</option>').join('')+'</optgroup>').join('')+'<option value="__other">Other (type it)</option>';
+}
+function regRole(){const r=document.querySelector('input[name=regRole]:checked');return r?r.value:''}
+function regRoleChanged(){
+  const r=regRole(), student=(r==='Student');
+  document.getElementById('lblId').innerHTML=(student?'Registration number':'Employee ID number')+'<span class="req" aria-hidden="true">*</span>';
+  document.getElementById('regId').placeholder=student?'e.g. your student number':'e.g. your employee ID';
+  document.getElementById('hId').textContent=student?'Your registration (student) number: it is also your Moodle username. Letters and numbers only.':'Your employee ID number. Letters and numbers only.';
+  document.getElementById('lblUnit').innerHTML=(student?'Programme':'Department / college')+'<span class="req" aria-hidden="true">*</span>';
+  validateProfile(false);
+}
+function regUnitChanged(){
+  const o=document.getElementById('regUnit').value==='__other';
+  document.getElementById('regUnitOther').style.display=o?'block':'none';
+  if(o) document.getElementById('regUnitOther').focus();
+}
+function regUnitValue(){
+  const v=document.getElementById('regUnit').value;
+  return v==='__other'?document.getElementById('regUnitOther').value.trim():v;
+}
+function validateProfile(showErrors){
+  const role=regRole(), name=document.getElementById('regName').value.trim(),
+        id=document.getElementById('regId').value.trim(), unit=regUnitValue();
+  const ok={role:!!role, name:name.length>=3&&/[A-Za-z؀-ۿ]/.test(name), id:/^[A-Za-z0-9._\/-]{3,24}$/.test(id), unit:unit.length>=2};
+  const set=(f,el,err,good)=>{const e=document.getElementById(err); const show=showErrors&&!good;
+    if(el)el.classList.toggle('bad',show); if(el)el.setAttribute('aria-invalid',show?'true':'false'); e.classList.toggle('show',show)};
+  set('role',null,'eRole',ok.role);
+  set('name',document.getElementById('regName'),'eName',ok.name);
+  set('id',document.getElementById('regId'),'eId',ok.id);
+  set('unit',document.getElementById('regUnit'),'eUnit',ok.unit);
+  const all=ok.role&&ok.name&&ok.id&&ok.unit;
+  document.getElementById('regGo').disabled=!all;
+  return all;
+}
+function profileComplete(p){return !!(p&&p.role&&p.name&&p.id&&p.unit)}
 function updateRolePill(){
-  document.getElementById('rolePill').textContent='👤 '+userRole+(userCollege?' · '+userCollege.replace(/^College of /,''):'')+' ▾';
+  const el=document.getElementById('rolePill'); if(!el) return;
+  const nm=PROFILE.name?PROFILE.name.split(/\s+/)[0]:'';
+  el.innerHTML='<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg> '+esc(nm||'Profile')+(userRole&&userRole!=='Not specified'?' · '+esc(userRole):'');
 }
-function openRole(){document.getElementById('roleModal').classList.add('show')}
-function pickRole(r){
-  userRole=r; userCollege=document.getElementById('collegeSel').value;
-  lsSet('gmuRole',r); lsSet('gmuCollege',userCollege);
+function openRole(){
+  buildUnitSelect();
+  const has=profileComplete(PROFILE);
+  document.getElementById('regCancel').style.display=has?'block':'none';
+  document.getElementById('regTitle').textContent=has?'Your details':'Welcome to the GMU AI Support Agent';
+  document.getElementById('regGo').textContent=has?'Save changes':'Continue';
+  if(has){
+    const r=document.querySelector('input[name=regRole][value="'+PROFILE.role+'"]'); if(r) r.checked=true;
+    document.getElementById('regName').value=PROFILE.name; document.getElementById('regId').value=PROFILE.id;
+    const sel=document.getElementById('regUnit'); const known=Array.from(sel.options).some(o=>o.value===PROFILE.unit);
+    sel.value=known?PROFILE.unit:'__other'; document.getElementById('regUnitOther').value=known?'':PROFILE.unit;
+    regUnitChanged();
+  }
+  regRoleChanged(); validateProfile(false);
+  document.getElementById('roleModal').classList.add('show');
+  setTimeout(function(){document.getElementById(has?'regName':'rStudent').focus()},50);
+}
+function closeRole(){ if(profileComplete(PROFILE)) document.getElementById('roleModal').classList.remove('show'); }
+function submitProfile(ev){
+  ev.preventDefault();
+  if(!validateProfile(true)) return false;
+  const changed=profileComplete(PROFILE);
+  PROFILE={role:regRole(),name:document.getElementById('regName').value.trim().replace(/\s+/g,' '),
+           id:document.getElementById('regId').value.trim().toUpperCase(),unit:regUnitValue()};
+  userRole=PROFILE.role; userCollege=PROFILE.unit;
+  lsSet('gmuProfile',JSON.stringify(PROFILE)); lsSet('gmuRole',userRole); lsSet('gmuCollege',userCollege);
   document.getElementById('roleModal').classList.remove('show');
-  updateRolePill();
-  if(!sessionStarted){sessionStarted=true;track('session_start',{detail:'new'});}
-  else track('role_change',{detail:r});
+  updateRolePill(); registerProfile();
+  if(!sessionStarted){sessionStarted=true;track('session_start',{detail:'new'});greetUser();}
+  else track('role_change',{detail:userRole});
+  return false;
 }
+function registerProfile(){            // saved once per change to the "Users" tab of the support sheet
+  if(!backendReady()) return;
+  try{fetch(BACKEND_URL,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify({action:'register',session:SESSION_ID,role:PROFILE.role,name:PROFILE.name,id:PROFILE.id,unit:PROFILE.unit,device:deviceType()})}).catch(function(){});}catch(e){}
+}
+function who(){return PROFILE.name?(PROFILE.name+(PROFILE.id?' ('+PROFILE.id+')':'')):'Anonymous'}
+function greetUser(){
+  const first=PROFILE.name?PROFILE.name.split(/\s+/)[0]:'';
+  addMsg("Hello"+(first?", **"+first+"**":"")+"! I'm your **GMU AI Support Agent**. I can guide you step by step with the **identity certificate, Moodle (MyGMU) login, Wi-Fi, University email, passwords, Folio, Examplify** and everyday Moodle teaching tasks such as the **gradebook, attendance, assignments and quizzes**.\n\nPick a topic below, or **type or speak** your question.",'bot');
+}
+
 function feedback(ok){
   track(ok?'feedback_yes':'feedback_no',{category:lastCategory});
   hideSatis();
-  if(!ok) addMsg("I'm sorry that did not solve it. Please raise a ticket and a support representative will contact you directly:\n\n👉 <a href='"+LINKS.ticket+"' target='_blank'>Raise a support ticket</a>",'bot');
+  if(!ok) addMsg("I'm sorry that did not solve it. Please raise a ticket or email support, and a support representative will contact you directly:\n\n👉 <a href='"+LINKS.ticket+"' target='_blank'>Raise a support ticket</a>",'bot');
 }
 
 const chat  = document.getElementById('chat');
@@ -850,6 +1064,7 @@ function typeInto(el, text, done){
 function format(t){
   return t
     .replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
+    .replace(/(^|[\s(])\*([^*\n]+?)\*(?=[\s).,:;!?]|$)/g,'$1<i>$2</i>')
     .replace(/(^|\s)(https?:\/\/[^\s<]+)/g,"$1<a href='$2' target='_blank' rel='noopener'>$2</a>")
     .replace(/\n/g,'<br>');
 }
@@ -866,13 +1081,14 @@ function autosize(el){el.style.height='auto';el.style.height=Math.min(el.scrollH
 /* ============================================================
    QUICK CHIPS
    ============================================================ */
-let CHIPS = ['Install identity certificate','No Moodle login page','Connect to Wi-Fi','Reset my password','Turnitin access','Assignment / lecture help'];
+let CHIPS = ['Install identity certificate','No Moodle login page','Connect to Wi-Fi','Reset my password','Gradebook setup','Take attendance','Turnitin access','Assignment / lecture help'];
 function renderChips(){
   const c=document.getElementById('chips');
   c.innerHTML='';
   CHIPS.forEach(t=>{
-    const b=document.createElement('div');b.className='chip';b.textContent=t;
+    const b=document.createElement('div');b.className='chip';b.textContent=t;b.tabIndex=0;b.setAttribute('role','button');
     b.onclick=()=>{document.getElementById('input').value=t;sendMsg()};
+    b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();b.click()}};
     c.appendChild(b);
   });
 }
@@ -892,6 +1108,335 @@ function matchKB(q){
 }
 
 /* ============================================================
+   GUIDED SUPPORT FLOWS  (questionnaires)
+   Each row is one step. Edit them in the Google Sheet tab "Flows" (columns: Active, Node, Title,
+   Triggers, Question, Options, Answer, Actions, Notes). The built-in copy below is the fallback.
+     Triggers : words that start/jump to this step. "a+b" means both words must appear.
+     Options  : one per line:  Button label => next node
+     Actions  : guide:<anim>[:ios|android|win|mac]  video:<ios|mac|win>  email  email:identity  ticket  portal
+   ============================================================ */
+const FLOWS_BUILTIN = [
+ {id:'pwd', title:'Password reset',
+  trig:'reset password, reset my password, forgot password, forgotten password, forgot my password, password reset, change password, lost password, cannot remember my password',
+  q:'I can help with that. Which account do you need to reset the password for?',
+  opts:`🎓 Moodle (MyGMU) => pwd_moodle
+📘 Folio => pwd_folio
+📧 University email (Google) => pwd_gmail
+🟦 Microsoft / official email => pwd_ms
+📶 Wi-Fi => wifi
+❓ I am not sure => pwd_unsure`},
+ {id:'pwd_unsure', title:'Password reset',
+  q:'No problem. Which of these are you trying to sign in to?',
+  opts:`🎓 Moodle (MyGMU) => pwd_moodle
+📘 Folio => pwd_folio
+📧 University email (Google) => pwd_gmail
+🟦 Microsoft / official email => pwd_ms
+📶 Wi-Fi => wifi`},
+ {id:'pwd_moodle', title:'Moodle password reset',
+  trig:'password+moodle, password+mygmu, password+lms, moodle+forgot',
+  a:`**Moodle (MyGMU) password**
+
+First check that the **Moodle login page opens** on your device. If no login page appears at all, the problem is the identity certificate, not your password.
+
+If the login page appears but sign-in fails:
+1. Select **Forgotten your password?**
+2. Enter **only your registration number** (not the full email).
+3. A reset link is sent to your University email.`,
+  opts:`The login page does not open => cert
+No reset email arrived => pwd_moodle_noemail`,
+  act:'guide:password, email, ticket'},
+ {id:'pwd_moodle_noemail', title:'Moodle reset email not received',
+  a:`No reset email usually means the account is **blocked** (for example a finance or other hold). Please contact your **college department** first.
+
+If they confirm the account is clear and the email still does not arrive, raise a ticket and the support team will check it.`,
+  act:'email, ticket'},
+ {id:'pwd_folio', title:'Folio password',
+  trig:'password+folio, folio+login, folio+reset, folio+forgot',
+  a:`**Folio default password**
+
+Your default password is your **date of birth in numbers: day, month, year (DDMMYYYY)**.
+
+Example: 5 March 1999 becomes **05031999**.`,
+  opts:`The default password does not work => pwd_folio_fail`},
+ {id:'pwd_folio_fail', title:'Folio password not working',
+  a:`If the default password does not work, or you changed it and have forgotten it, we will need to reset it for you.
+
+Please raise a ticket or email support with your **name, registration number and programme**. Never include your password in the message.`,
+  act:'email, ticket'},
+ {id:'pwd_ms', title:'Microsoft account password',
+  trig:'password+microsoft, password+office 365, password+microsoft 365, password+outlook, password+official, password+onmicrosoft',
+  a:`**Microsoft / official email password**
+
+For a University-issued Microsoft account, self-service reset shows "ask your administrator for permission". This is expected.
+
+Please **raise a ticket** or email support. The team will reset it and send you the updated credentials, with a temporary password to change when you first sign in.`,
+  act:'email, ticket'},
+ {id:'pwd_gmail', title:'University email password',
+  trig:'password+gmail, password+google, password+university email, password+student email, email+password, mail+password',
+  q:`**University email (Google) password**
+
+Self-service reset is available **only if 2-Step Verification is already turned on** for your account, because the verification code is sent to your registered mobile number.
+
+Is 2-Step Verification turned on for your account?`,
+  opts:`✅ Yes, it is on => pwd_gmail_yes
+❌ No, or I am not sure => pwd_gmail_no`},
+ {id:'pwd_gmail_yes', title:'University email password (2-Step on)',
+  a:`1. On the Google sign-in screen select **Forgot password?**
+2. Verify with the code sent to your **registered mobile number**.
+3. Set your new password.`,
+  opts:`I do not receive the code => pwd_gmail_otp`},
+ {id:'pwd_gmail_otp', title:'University email verification code not received',
+  a:`- On the sign-in screen choose **Try another way** to send the code to your registered mobile number.
+- Or, on a device where Gmail is already signed in, open **Manage your Google Account, Security, 2-Step Verification**, check the phone number and receive the code there.
+
+If it still does not work, contact support.`,
+  act:'email, ticket'},
+ {id:'pwd_gmail_no', title:'University email password (2-Step off)',
+  a:`Without 2-Step Verification, you **cannot** reset this password yourself.
+
+Please **contact support or raise a ticket**. The team will verify your identity and help you regain access.`,
+  act:'email, ticket'},
+
+ {id:'wifi', title:'Wi-Fi access',
+  trig:'connect to wi-fi, connect to wifi, wifi password, wi-fi password, wifi login, wi-fi login, wifi username, cannot connect to wifi',
+  q:'Which batch are you in?',
+  opts:`First year (2026 batch) => wifi_new
+Second year onwards => wifi_old`},
+ {id:'wifi_new', title:'Wi-Fi (first year, 2026 batch)',
+  a:`Connect to **GMU-Students**.
+
+- **Username:** your registration number
+- **Password:** **GMU@** followed by your **year of birth** (try capital letters first, then lowercase)`,
+  act:'guide:wifi, email, ticket'},
+ {id:'wifi_old', title:'Wi-Fi (second year onwards)',
+  a:`Connect to **GMU-Students**.
+
+- **Username:** your registration number
+- **Password:** your registration number, then **@**, then your **year of birth**
+
+Type all letters in **capitals**.`,
+  act:'guide:wifi, email, ticket'},
+
+ {id:'cert', title:'Identity certificate',
+  trig:'install identity certificate, no moodle login page, identity certificate, install certificate, install the certificate, no login page, profile not signed, p12',
+  q:'Moodle only opens on a device that has your personal identity certificate. Which device are you using?',
+  opts:`📱 iPhone / iPad => cert_ios
+🤖 Android => cert_android
+🪟 Windows laptop => cert_win
+💻 Mac => cert_mac
+📨 I have not requested it yet => cert_request
+⌛ It expired or stopped working => cert_expired`},
+ {id:'cert_ios', title:'Certificate on iPhone / iPad',
+  trig:'certificate+iphone, certificate+ipad, certificate+ios',
+  a:`**iPhone / iPad**
+
+1. Open your reply from identity@gmu.ac.ae ("Controlled System Access") and save the attached **clientlegacy.p12** to **Files**.
+2. Tap the file, then open **Settings, General, VPN & Device Management**, select the **identity certificate** and tap **Install**.
+3. Enter your passcode, then paste the certificate password from the email (no extra spaces). Tap **Next, Install, Done**.
+4. **Restart** the device, open **Safari** and go to {{moodle}}.
+
+The Moodle app is not supported. Use a browser.`,
+  opts:`It still does not open => cert_fail`,
+  act:'guide:certificate:ios, video:ios, email, ticket'},
+ {id:'cert_android', title:'Certificate on Android',
+  trig:'certificate+android, certificate+samsung',
+  a:`**Android**
+
+1. Download the attachment from your certificate email (**client.p12**) and **tap it**, then open it with the installer.
+2. Paste the certificate password (no extra spaces) and install it for **VPN and apps**.
+3. **Restart**, open **Chrome** and go to {{moodle}}.`,
+  opts:`It still does not open => cert_fail`,
+  act:'guide:certificate:android, email, ticket'},
+ {id:'cert_win', title:'Certificate on Windows',
+  trig:'certificate+windows, certificate+laptop',
+  a:`**Windows**
+
+1. Open **client.p12**, then in the Certificate Import Wizard select **Next**.
+2. Paste the certificate password (no extra spaces).
+3. Store the certificate in **Personal**, then select **Finish**.
+4. Close the browser completely and reopen it (restart the PC if it still fails), then go to {{moodle}}.`,
+  opts:`It still does not open => cert_fail`,
+  act:'guide:certificate:win, video:win, email, ticket'},
+ {id:'cert_mac', title:'Certificate on Mac',
+  trig:'certificate+mac, certificate+macbook, certificate+keychain',
+  a:`**Mac**
+
+1. Download and open **clientlegacy.p12**, then paste the certificate password (no extra spaces).
+2. Open **Keychain Access** and select **login**. Double-click the certificate that carries your name, open **Trust** and choose **Always Trust**.
+3. **Restart**, open **Safari** and go to {{moodle}}.`,
+  opts:`It still does not open => cert_fail`,
+  act:'guide:certificate:mac, video:mac, email, ticket'},
+ {id:'cert_request', title:'Request the identity certificate',
+  a:`Send an email **from your University email** to **{{identity}}** with the subject **LMS access**.
+
+You will receive a reply headed "Controlled System Access" with your certificate file and its password. It is issued to you alone, so never share or forward it.
+
+Remedial and BCPS students use the same certificate for {{moodleOnline}}.`,
+  opts:`Show me how to install it => cert`,
+  act:'email:identity, ticket'},
+ {id:'cert_expired', title:'Expired identity certificate',
+  a:`An expired certificate cannot be renewed on the device. A **new one must be issued**; your username and password stay the same.
+
+Email **{{identity}}** from your University email with the subject **LMS access** and ask for a renewal. Remove the expired certificate, install the new one and **restart**.`,
+  opts:`Show me how to install it => cert`,
+  act:'email:identity, ticket'},
+ {id:'cert_fail', title:'Certificate installed but Moodle will not open',
+  a:`Please check each point:
+1. You **restarted** the device after installing (the most-skipped step).
+2. The certificate is installed on **this** device. Each device needs its own copy.
+3. You are using a **web browser**, not the Moodle app.
+4. **Windows:** install it for your own user account, close and reopen the browser, and try removing any VPN or temporarily disabling antivirus.
+5. **Mac:** in Keychain Access make sure the certificate in your name is Trusted and remove any expired ones.
+6. **iPhone / iPad:** remove any VPN and update to the latest iOS.
+
+If it still fails, a support representative will help you.`,
+  act:'email, ticket'}
+];
+
+/* ============================================================
+   GUIDED FLOW ENGINE  (questions -> answer -> action buttons)
+   ============================================================ */
+let SFLOWS={};
+function parseFlows(rows){
+  const m={};
+  (rows||[]).forEach(function(r){
+    if(!r||!r.id) return;
+    const opts=String(r.opts||'').split(/\n/).map(function(l){const i=l.indexOf('=>');return i<0?null:[l.slice(0,i).trim(),l.slice(i+2).trim()]}).filter(function(o){return o&&o[0]&&o[1]});
+    m[String(r.id).trim()]={id:String(r.id).trim(),title:r.title||'',
+      trig:String(r.trig||'').split(/[,\n]/).map(function(x){return x.trim().toLowerCase()}).filter(Boolean),
+      q:r.q||'',opts:opts,a:r.a||'',
+      act:String(r.act||'').split(/[,\n|]/).map(function(x){return x.trim()}).filter(Boolean)};
+  });
+  return m;
+}
+SFLOWS=parseFlows(FLOWS_BUILTIN);
+const FLOWCTX={root:'',title:'',path:[],os:''};
+function rootOf(id){const r=id.split('_')[0];return SFLOWS[r]?r:id}
+
+/* Which step does this message belong to?  Plain words score 1; "a+b" (both present) scores 2 per word,
+   so "certificate on my iPhone" jumps straight to the iPhone step while "reset password" opens the menu. */
+function matchFlow(q){
+  const s=' '+q.toLowerCase()+' ';
+  let best=null,score=0;
+  Object.keys(SFLOWS).forEach(function(id){
+    let sc=0;
+    SFLOWS[id].trig.forEach(function(k){
+      if(k.indexOf('+')>-1){const p=k.split('+').map(function(x){return x.trim()});if(p.every(function(x){return s.indexOf(x)>-1}))sc=Math.max(sc,2*p.length)}
+      else if(s.indexOf(k)>-1) sc=Math.max(sc,1);
+    });
+    if(sc>score){score=sc;best=id}
+  });
+  return best;
+}
+
+const ICO={
+ play:'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
+ video:'<svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3z"/></svg>',
+ mail:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
+ ticket:'<svg viewBox="0 0 24 24"><path d="M3 9a2 2 0 0 0 0 6v3a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-3a2 2 0 0 1 0-6V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1z"/></svg>',
+ globe:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>'};
+const OS_LABEL={ios:'iPhone / iPad',android:'Android',win:'Windows',mac:'Mac'};
+function isMobileDevice(){return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)}
+
+/* Pre-filled e-mail drafts. On a computer they open Gmail compose (the University email is Google);
+   on a phone they open the default mail app. */
+function openEmail(kind){
+  kind=kind||'support';
+  const who=userRole&&userRole!=='Not specified'?userRole:'';
+  const path=FLOWCTX.path.length?FLOWCTX.path.join('  >  '):'';
+  let to,subject,body;
+  if(kind==='identity'){
+    to=LINKS.identity; subject='LMS access';
+    body='Dear Support,\n\nKindly issue my LMS access certificate.\n\nName: '+(PROFILE.name||'')+'\nStudent number: '+(PROFILE.id||'')+'\nProgramme: '+(PROFILE.unit||'')+'\n\nThank you.';
+  }else{
+    to=LINKS.support; subject=(FLOWCTX.title||'Support request')+' - Support request';
+    body='Dear IT & E-Learning Support,\n\nI need assistance with: '+(FLOWCTX.title||'')+'\n'+
+      (path?'What I selected in the assistant: '+path+'\n':'')+
+      '\nPlease describe the problem here:\n\n\nMy details\nName: '+(PROFILE.name||'')+'\nRegistration / employee number: '+(PROFILE.id||'')+'\n'+
+      'Role: '+who+'\nCollege / programme / department: '+(userCollege||'')+'\nDevice: '+(OS_LABEL[FLOWCTX.os||currentOS]||'')+'\nContact number: \n\nThank you.';
+  }
+  track('email_click',{detail:kind,category:FLOWCTX.title||lastCategory});
+  const enc=encodeURIComponent;
+  const url=isMobileDevice()
+    ?'mailto:'+to+'?subject='+enc(subject)+'&body='+enc(body)
+    :'https://mail.google.com/mail/?view=cm&fs=1&to='+enc(to)+'&su='+enc(subject)+'&body='+enc(body);
+  window.open(url,isMobileDevice()?'_self':'_blank');
+}
+function viewGuide(anim,os,title){
+  if(os){currentOS=os;G.os=os}
+  G.pending=null; openGuide(anim,title||FLOWCTX.title||'');
+}
+
+function actionButton(tok,node){
+  const p=tok.split(':'), k=p[0];
+  const mk=function(cls,label,fn){const b=document.createElement('button');b.className='vbtn abtn '+cls;b.innerHTML=label;b.onclick=fn;return b};
+  if(k==='guide'&&guideAvailable(p[1])){
+    const os=p[2]||currentOS;
+    return mk('go',ICO.play+'View the '+(OS_LABEL[os]||'device')+' navigation',function(){viewGuide(p[1],os,node.title)});
+  }
+  if(k==='video') return mk('vid',ICO.video+'Watch the video guide',function(){openVideo(p[1])});
+  if(k==='email'&&p[1]==='identity') return mk('mail',ICO.mail+'Request the certificate (email draft ready)',function(){openEmail('identity')});
+  if(k==='email') return mk('mail',ICO.mail+'Email support (draft ready)',function(){openEmail('support')});
+  if(k==='ticket') return mk('tkt',ICO.ticket+'Raise a ticket',function(){openTicket('flow:'+node.id)});
+  if(k==='portal') return mk('mail',ICO.globe+'Support portal',openPortal);
+  return null;
+}
+
+function runFlow(id,viaOption){
+  const n=SFLOWS[id]; if(!n) return false;
+  FLOWCTX.root=rootOf(id);
+  if(n.title) FLOWCTX.title=n.title;
+  let text='';
+  if(n.a) text+=fill(n.a);
+  if(n.q){const qq=fill(n.q); text+=(text?'\n\n':'')+(qq.indexOf('\n')>-1?qq:'**'+qq+'**');}
+  const msg=addMsg(text,'bot');
+  const bub=msg.querySelector('.bubble');
+
+  if(n.opts.length){
+    const w=document.createElement('div');w.className='suggest flowopts';
+    n.opts.forEach(function(o){
+      const b=document.createElement('div');b.className='chip';b.textContent=o[0].replace(/^[^\w(]+/,'').trim();b.tabIndex=0;b.setAttribute('role','button');b.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();b.click()}};
+      b.onclick=function(){
+        w.classList.add('used');
+        addMsg(o[0],'user'); history.push({role:'user',content:o[0].replace(/^[^\w]+/,'')});
+        FLOWCTX.path.push(o[0].replace(/^[^\w(]+/,'').trim());
+        track('flow_choice',{detail:id+' > '+o[1],category:FLOWCTX.title});
+        setTimeout(function(){runFlow(o[1],true)},250);
+      };
+      w.appendChild(b);
+    });
+    bub.appendChild(w);
+  }
+  if(n.a){                                   // an answer step: offer the next actions
+    const acts=n.act.slice();
+    if(!acts.some(function(a){return a==='email'||a.indexOf('email:')===0}))acts.push('email');
+    if(acts.indexOf('ticket')<0)acts.push('ticket');
+    const row=document.createElement('div');row.className='actrow';
+    acts.forEach(function(a){const b=actionButton(a,n);if(b)row.appendChild(b)});
+    bub.appendChild(row);
+  }
+  if(id!==FLOWCTX.root&&SFLOWS[FLOWCTX.root]){
+    const s=document.createElement('div');s.className='startover';
+    s.innerHTML='<a href="#">↩ Start over</a>';
+    s.firstChild.onclick=function(e){e.preventDefault();FLOWCTX.path=[];runFlow(FLOWCTX.root)};
+    bub.appendChild(s);
+  }
+  history.push({role:'assistant',content:(n.a||n.q||'').replace(/\*\*/g,'').replace(/<[^>]+>/g,' ')});
+  chat.scrollTop=chat.scrollHeight;
+  if(n.a){speak(text);showSatis()}
+  return true;
+}
+function startFlow(id,q,mode){
+  FLOWCTX.path=[];FLOWCTX.os=currentOS;
+  FLOWCTX.title=SFLOWS[id].title;
+  if(rootOf(id)!==id) FLOWCTX.path.push(SFLOWS[id].title);
+  track('flow_start',{detail:id,category:SFLOWS[id].title});
+  track('question',{category:SFLOWS[id].title,source:'flow',input:mode,detail:''});
+  lastCategory=SFLOWS[id].title;
+  runFlow(id);
+}
+
+/* ============================================================
    SEND MESSAGE
    ============================================================ */
 async function sendMsg(){
@@ -904,9 +1449,10 @@ async function sendMsg(){
   addMsg(q,'user');
   history.push({role:'user',content:q});
 
-  const hit=matchKB(q);
   const mode=inputMode; inputMode='typed';
-  if(hit) playAnimation(hit.anim, hit.cat);   // instant visual guide
+  const fid=matchFlow(q);                      // guided questionnaire (password reset, certificate, Wi-Fi ...)
+  if(fid){ document.getElementById('sendBtn').disabled=false; firstTurn=false; startFlow(fid,q,mode); return; }
+  const hit=matchKB(q);                        // the visual guide opens only when the student asks for it
 
   typing();
 
@@ -938,7 +1484,7 @@ async function sendMsg(){
       if(vb && bubbleMsg) bubbleMsg.querySelector('.bubble').insertAdjacentHTML('beforeend','<div style="margin-top:8px">'+vb+'</div>');
     }
     if(src==='none' || (offline && !hit)) addTopicChips(bubbleMsg);
-    if(isNarrow() && hit && guideAvailable(hit.anim)){G.cat=hit.cat;addGuideButton(hit.anim);}
+    if(hit && guideAvailable(hit.anim)){G.cat=hit.cat;addGuideButton(hit.anim);}
     document.getElementById('sendBtn').disabled=false;
     chat.scrollTop=chat.scrollHeight;
     showSatis();
@@ -972,7 +1518,7 @@ function askAI(q){
   return new Promise(resolve=>{
     if(!backendReady()){ aiState={status:'nourl',errors:{},when:Date.now()}; updateAIPill(); return resolve({answer:'',errors:{},nourl:true}); }
     const t0=Date.now(), errors={}, ctrls=[]; let next=0, running=0, done=false, hedge=null;
-    const body=p=>JSON.stringify({action:'ask',provider:p,message:q,history:history.slice(-6,-1),name:'Anonymous',role:userRole,college:userCollege,
+    const body=p=>JSON.stringify({action:'ask',provider:p,message:q,history:history.slice(-6,-1),name:who(),role:userRole,college:userCollege,
       category:(matchKB(q)||{}).cat||'Other / Unmatched',
       system:KB_VERSION===''?SYSTEM_PROMPT:undefined});      // server builds the prompt from the sheet; this is only a safety net
     function finish(r){
@@ -1634,7 +2180,7 @@ window.addEventListener('resize',function(){fitDevice();if(G.anim){const vp=docu
 if(window.ResizeObserver){new ResizeObserver(function(){fitDevice()}).observe(document.getElementById('gstage'));}
 function addGuideButton(anim){
   const bubbles=document.querySelectorAll('#chat .msg.bot .bubble'); const b=bubbles[bubbles.length-1]; if(!b) return;
-  b.insertAdjacentHTML('beforeend',"<div style='margin-top:8px'><button class='vbtn' style='color:#0a6b4b;background:#e6f6ef;border-color:#b6e2d0' onclick=\"G.pending=null;openGuide('"+anim+"','"+(G.cat||'')+"')\">▶ Watch the step-by-step guide</button></div>");
+  b.insertAdjacentHTML('beforeend',"<div style='margin-top:8px'><button class='vbtn' style='color:#0a6b4b;background:#e6f6ef;border-color:#b6e2d0' onclick=\"G.pending=null;openGuide('"+anim+"','"+(G.cat||'')+"')\">View the navigation on a virtual screen</button></div>");
 }
 
 /* ============================================================
@@ -1785,6 +2331,7 @@ function applyKnowledge(d){
       return k;
     });
   }
+  if(Array.isArray(d.flows)&&d.flows.length){const f=parseFlows(d.flows); if(Object.keys(f).length) SFLOWS=f;}
   if(d.rules) RULES=d.rules;
   SYSTEM_PROMPT=buildSystemPrompt();
   renderChips();
@@ -1820,13 +2367,12 @@ function init(){
   startKnowledgeSync();
   initAdmin();
   initSpeech();
-  const saved=lsGet('gmuRole');
-  if(saved){
-    userRole=saved; userCollege=lsGet('gmuCollege');
-    document.getElementById('collegeSel').value=userCollege;
+  let saved=null; try{saved=JSON.parse(lsGet('gmuProfile')||'null')}catch(e){}
+  if(profileComplete(saved)){
+    PROFILE=saved; userRole=PROFILE.role; userCollege=PROFILE.unit;
     updateRolePill(); sessionStarted=true; track('session_start',{detail:'returning'});
-  } else { updateRolePill(); openRole(); }
-  addMsg("Hello! I'm the GMU Smart Support Assistant. How can I help you today?\n\nI can help with the **identity certificate, Moodle (MyGMU) login, Wi-Fi, University email, 2-Step Verification, passwords, Examplify and new-student setup**. You can **type or tap the 🎤 mic to speak**, and turn on **🔊 Read aloud** to hear my answers.",'bot');
+    greetUser();
+  } else { updateRolePill(); openRole(); }       // first visit: registration is mandatory
 }
 init();
 </script>
